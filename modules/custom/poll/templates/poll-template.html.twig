@@ -1,0 +1,6 @@
+{{ poll.question|e }}
+<ul>
+    {% for answer in poll.answers %}
+        <li><a href="{{ path('poll.result.save', {'question_id': poll.question_id, 'answer_id': answer.pa_id}) }}">{{ answer.pa_name|e }}</a></li>
+    {% endfor %}
+</ul>

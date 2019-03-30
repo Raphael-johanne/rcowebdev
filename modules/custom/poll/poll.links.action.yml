@@ -1,0 +1,10 @@
+poll.answer.edit:
+  route_name: poll.answer.edit
+  title: 'Add answer'
+  appears_on:
+    - poll.answer.overview
+poll.question.edit:
+  route_name: poll.question.edit
+  title: 'Add question'
+  appears_on:
+    - poll.question.overview

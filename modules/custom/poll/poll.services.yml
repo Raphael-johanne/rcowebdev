@@ -1,0 +1,10 @@
+services:
+  poll.manager:
+   class: Drupal\poll\PollManager
+   arguments: ['@database']
+   tags:
+     - { name: poll_manager }
+  poll.breadcrumb:
+   class: Drupal\poll\Breadcrumb\PollBreadcrumbBuilder
+   tags:
+     - { name: breadcrumb_builder, priority: 100 }

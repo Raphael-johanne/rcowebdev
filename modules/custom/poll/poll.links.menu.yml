@@ -1,0 +1,18 @@
+poll.answer:
+  title: 'Poll Answer'
+  description: 'Administer Poll s answers'
+  route_name: poll.answer.overview
+  parent: poll.question
+  weight: 0
+poll.result:
+  title: 'Poll Result'
+  description: 'Show Poll s results'
+  route_name: poll.result.overview
+  parent: poll.question
+  weight: 1 
+poll.question:
+  title: 'Poll'
+  description: 'Administer Polls'
+  route_name: poll.question.overview
+  parent: system.admin_reports
+  weight: -1

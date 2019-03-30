@@ -1,0 +1,23 @@
+<?php
+
+function poll_theme($existing, $type, $theme, $path) {
+  return [
+    'poll_template' => [
+      'variables' => [
+      	'poll' => null
+      ],
+    ],
+    'poll_result_template' => [
+      'variables' => [
+        'poll'  => null,
+        'total' => null
+      ],
+    ],
+    'poll_admin_result_template' => [
+      'variables' => [
+        'poll'  => null,
+        'total' => null
+      ],
+    ],
+  ];
+}

@@ -1,0 +1,125 @@
+<?php
+use Drupal\Core\Database\Database;
+
+/**
+* Implements hook_schema().
+*
+* Defines the database tables used by this module.
+*
+* @see hook_schema()
+*
+* @ingroup poll
+*/
+function poll_schema() {
+  $schema['poll_question'] = [
+    'description' => 'Poll questions',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Question label',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['poll_answer'] = [
+    'description' => 'Poll answers',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Answer label',
+      ]
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['poll_question_answer'] = [
+    'description' => 'Poll question / answer',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'ID',
+      ],
+      'answer_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'question_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+    ],
+    'foreign keys' => [
+      'poll_answer' => [
+        'table' => 'poll_answer',
+        'columns' => [
+          'id' => 'answer_id', 
+        ],
+        'on update' => 'cascade',
+        'on delete' => 'set null',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['poll_result'] = [
+    'description' => 'Poll results',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Result ID',
+      ],
+      'answer_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'question_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+      'ip' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'IP',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+  return $schema;
+}
+
+/**
+* uninstall
+*/
+function poll_uninstall() {
+  $db = Database::getConnection()
+    ->schema();
+
+    $db->dropTable('poll_question');
+    $db->dropTable('poll_answer');
+    $db->dropTable('poll_question_answer');
+    $db->dropTable('poll_result');
+}

@@ -1,0 +1,6 @@
+name: Poll Module
+description: Exercice Poll module
+package: Custom
+
+type: module
+core: 8.x

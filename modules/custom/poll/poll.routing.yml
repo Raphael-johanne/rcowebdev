@@ -1,0 +1,65 @@
+poll.question.overview:
+  path: '/admin/poll/list'
+  defaults:
+    _controller: '\Drupal\poll\Controller\QuestionController::overview'
+    _title: 'Polls'
+  requirements:
+    _permission: 'administer poll'
+poll.question.edit:
+  path: '/admin/poll_question/edit/{id}'
+  defaults:
+    _form: '\Drupal\poll\Form\Question\EditForm'
+    _title: 'Poll Question edit'
+    id: null
+  requirements:
+    _permission: 'administer poll'
+poll.question.delete:
+  path: '/admin/poll_question/delete/{id}'
+  defaults:
+    _form: '\Drupal\poll\Form\Question\DeleteForm'
+    _title: 'Poll Question delete'
+  requirements:
+    _permission: 'administer poll'    
+poll.answer.overview:
+  path: '/admin/poll_answer/list'
+  defaults:
+    _controller: '\Drupal\poll\Controller\AnswerController::overview'
+    _title: 'Poll Answers'
+  requirements:
+    _permission: 'administer poll'
+poll.answer.edit:
+  path: '/admin/poll_answer/edit/{id}'
+  defaults:
+    _form: '\Drupal\poll\Form\Answer\EditForm'
+    _title: 'Poll Answer edit'
+    id: null
+  requirements:
+    _permission: 'administer poll'
+poll.answer.delete:
+  path: '/admin/poll_answer/delete/{id}'
+  defaults:
+    _form: '\Drupal\poll\Form\Answer\DeleteForm'
+    _title: 'Poll Answer delete'
+  requirements:
+    _permission: 'administer poll'
+poll.result.save:
+  path: '/poll_result/save/{question_id}/{answer_id}'
+  defaults:
+    _controller: '\Drupal\poll\Controller\ResultController::save'
+    _title: 'Poll result save'
+  requirements:
+    _access: 'TRUE'   
+poll.result.overview:
+  path: '/admin/poll_result/list'
+  defaults:
+    _controller: '\Drupal\poll\Controller\ResultController::overview'
+    _title: 'Poll result list'
+  requirements:
+    _permission: 'administer poll' 
+poll.result.view:
+  path: '/admin/poll_result/view/{question_id}'
+  defaults:
+    _controller: '\Drupal\poll\Controller\ResultController::view'
+    _title: 'Poll Result view'
+  requirements:
+    _permission: 'administer poll'

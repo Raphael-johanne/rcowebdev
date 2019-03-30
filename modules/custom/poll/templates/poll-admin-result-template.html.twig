@@ -1,0 +1,6 @@
+{{ poll.question|e }}
+<ul>
+    {% for answer in poll.answers %}
+        <li>{{ answer.pa_name|e }} : <progress id="file" max="{{ total }}" value="{{ answer.nbr }}"> {{ answer.nbr }} </progress>&nbsp;/&nbsp;{{ answer.nbr }}</li>
+    {% endfor %}
+</ul>
