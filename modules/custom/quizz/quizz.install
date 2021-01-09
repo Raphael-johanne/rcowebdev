@@ -1,0 +1,168 @@
+<?php
+use Drupal\Core\Database\Database;
+
+/**
+* Implements hook_schema().
+*
+* Defines the database tables used by this module.
+*
+* @see hook_schema()
+*
+* @ingroup quizz
+*/
+function quizz_schema() {
+  $schema['quizz_question'] = [
+    'description' => 'Quizz questions',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Question label',
+      ],
+      'quizz_picture' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => 'Question picture',
+      ],
+      'quizz_good_answer_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => 'Good Answer ID',
+      ],
+      'quizz_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => 'Quizz ID',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['quizz_answer'] = [
+    'description' => 'quizz answers',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Answer label',
+      ]
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['quizz'] = [
+    'description' => 'quizz',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Quizz ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Quizz label',
+      ]
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['quizz_question_answer'] = [
+    'description' => 'Quizz question / answer',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'ID',
+      ],
+      'answer_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'question_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+    ],
+    'foreign keys' => [
+      'quizz_answer' => [
+        'table' => 'quizz_answer',
+        'columns' => [
+          'id' => 'answer_id', 
+        ]
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+   $schema['quizz_result'] = [
+    'description' => 'Quizz results',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Result ID',
+      ],
+      'answer_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Answer ID',
+      ],
+      'question_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
+      'ip' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'IP',
+      ],
+      'pseudo' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'pseudo',
+      ]
+    ],
+    'primary key' => ['id']
+  ];
+
+  return $schema;
+}
+
+/**
+* uninstall
+*/
+function quizz_uninstall() {
+  $db = Database::getConnection()->schema();
+  $db->dropTable('quizz_question');
+  $db->dropTable('quizz_answer');
+  $db->dropTable('quizz_question_answer');
+  $db->dropTable('quizz_result');
+}

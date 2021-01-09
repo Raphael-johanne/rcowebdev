@@ -1,0 +1,10 @@
+services:
+  match_point.manager:
+   class: Drupal\match_point\MatchPointManager
+   arguments: ['@database']
+   tags:
+     - { name: match_point }
+  poll.breadcrumb:
+   class: Drupal\match_point\Breadcrumb\PollBreadcrumbBuilder
+   tags:
+     - { name: breadcrumb_builder, priority: 100 }

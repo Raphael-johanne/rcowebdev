@@ -1,0 +1,6 @@
+name: Destroy Module
+description: Destroy module
+package: Custom
+
+type: module
+core: 8.x

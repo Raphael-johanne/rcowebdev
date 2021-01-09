@@ -1,0 +1,5 @@
+deploy.settings.link:
+  title: 'Deploy'
+  description: 'Deploy module configuration'
+  parent: system.admin_config_services
+  route_name: 'deploy.settings'

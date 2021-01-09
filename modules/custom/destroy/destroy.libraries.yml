@@ -1,0 +1,6 @@
+destroy:
+  version: 1.x
+  js:
+    js/destroy.js: {}
+  dependencies:
+    - core/jquery 

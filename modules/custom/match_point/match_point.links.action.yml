@@ -1,0 +1,5 @@
+match_point.user.edit:
+  route_name: match_point.user.edit
+  title: 'Add user'
+  appears_on:
+    - match_point.overview

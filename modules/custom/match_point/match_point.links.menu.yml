@@ -1,0 +1,6 @@
+match_point.overview:
+  title: 'Match point'
+  description: 'Administer Match points'
+  route_name: match_point.overview
+  parent: system.admin_reports
+  weight: -1

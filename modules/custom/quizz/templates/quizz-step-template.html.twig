@@ -1,0 +1,9 @@
+{{ quizz.question|e }}
+{% if quizz.picture %}
+    <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
+{% endif %}
+<ul>
+    {% for answer in quizz.answers %}
+        <li><a href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.pa_id}) }}">{{ answer.pa_name|e }}</a></li>
+    {% endfor %}
+</ul>

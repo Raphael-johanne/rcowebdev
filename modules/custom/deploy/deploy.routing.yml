@@ -1,0 +1,7 @@
+deploy.settings:
+  path: '/admin/config/deploy/settings'
+  defaults:
+    _form: '\Drupal\deploy\Form\DeploySettingsForm'
+    _title: 'deploy'
+  requirements:
+    _permission: 'administer site configuration'

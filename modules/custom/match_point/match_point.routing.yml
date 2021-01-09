@@ -1,0 +1,22 @@
+match_point.overview:
+  path: '/admin/match_point/users'
+  defaults:
+    _controller: '\Drupal\match_point\Controller\UserController::overview'
+    _title: 'Users'
+  requirements:
+    _permission: 'administer match_point'
+match_point.user.edit:
+  path: '/admin/match_point/edit/{id}'
+  defaults:
+    _form: '\Drupal\match_point\Form\User\EditForm'
+    _title: 'Match point User edit'
+    id: null
+  requirements:
+    _permission: 'administer match_point'
+match_point.user.delete:
+  path: '/admin/match_point/delete/{id}'
+  defaults:
+    _form: '\Drupal\match_point\Form\User\DeleteForm'
+    _title: 'Match point User delete'
+  requirements:
+    _permission: 'administer match_point' 

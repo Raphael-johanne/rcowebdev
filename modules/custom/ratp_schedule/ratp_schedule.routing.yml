@@ -1,0 +1,36 @@
+ratp_schedule.bus.schedule:
+  path: '/ratp_schedule/bus/schedule/{id}'
+  defaults:
+    _controller: '\Drupal\ratp_schedule\Controller\BusController::schedule'
+    _title: 'Ratp schedule vtestiew'
+  requirements:
+    _access: 'TRUE'
+ratp_schedule.overview:
+  path: '/admin/ratp_schedule/overview'
+  defaults:
+    _controller: '\Drupal\ratp_schedule\Controller\ScheduleController::overview'
+    _title: 'Ratp Schedules'
+  requirements:
+    _permission: 'administer ratp schedule'
+ratp_schedule.schedule.edit:
+  path: '/admin/ratp_schedule/edit/{id}'
+  defaults:
+    _form: '\Drupal\ratp_schedule\Form\Schedule\EditForm'
+    _title: 'ratp_schedule schedule edit'
+    id: null
+  requirements:
+    _permission: 'administer ratp_schedule'
+ratp_schedule.schedule.delete:
+  path: '/admin/ratp_schedule/delete/{id}'
+  defaults:
+    _form: '\Drupal\ratp_schedule\Form\Schedule\DeleteForm'
+    _title: 'ratp_schedule schedule delete'
+  requirements:
+    _permission: 'administer ratp schedule'
+ratp_schedule.schedule.selection:
+  path: '/ratp_schedule/selection'
+  defaults:
+    _controller: '\Drupal\ratp_schedule\Controller\ScheduleController::selection'
+    _title: 'Schedule selection'
+  requirements:
+    _access: 'TRUE' 

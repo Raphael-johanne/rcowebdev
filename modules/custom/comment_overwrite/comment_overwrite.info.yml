@@ -1,0 +1,6 @@
+name: Comment Overwrite
+description: Overwrite Comment native module
+package: Custom
+
+type: module
+core: 8.x

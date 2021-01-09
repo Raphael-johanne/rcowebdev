@@ -1,0 +1,24 @@
+quizz.overview:
+  title: 'Quizz'
+  description: 'Administer quizz overview'
+  route_name: quizz.overview
+  parent: system.admin_reports
+  weight: 0
+quizz.answer:
+  title: 'Answers'
+  description: 'Administer quizz s answers'
+  route_name: quizz.answer.overview
+  parent: quizz.overview
+  weight: 0
+quizz.question:
+  title: 'Questions'
+  description: 'Administer quizz'
+  route_name: quizz.question.overview
+  parent: quizz.overview
+  weight: -1
+quizz.results:
+  title: 'Results'
+  description: 'Administer quizz'
+  route_name: quizz.question.overview
+  parent: quizz.overview
+  weight: -1  

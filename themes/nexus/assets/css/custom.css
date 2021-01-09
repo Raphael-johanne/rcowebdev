@@ -1,0 +1,155 @@
+/*-------------------------------------------*
+/* Tabs and Tags
+/*-------------------------------------------*/
+.field--name-field-taxo {
+  display: flex;
+}
+
+.field--name-field-taxo div.field__label {
+  font-weight: bold;
+}
+
+.field--name-field-taxo div.field__label:after {
+  content: ':';
+}
+
+.field--name-field-taxo{
+  display: flex;
+  margin: 0;
+  list-style: none;
+}
+
+.field--name-field-taxo div{
+  margin: 0 0 0 0.3em;
+  display:inline;
+}
+
+.field--name-field-taxo .field__item {
+  background: #ed564b;
+  text-shadow: none;
+  border-radius: 2px;
+  color: #fff;
+  padding: 2px 6px;
+}
+
+/** MESSAGES **/
+div.warning, table tr.warning {
+  background-color: #fffce5;
+}
+
+div.warning, .warning {
+  color: #840;
+}
+
+div.error, table tr.error {
+  background-color: #fef5f1;
+}
+
+div.error, .error {
+  color: #8c2e0b;
+}
+
+div.error {
+  border-color: #ed541d;
+}
+
+div.warning {
+  border-color: #ed5;
+}
+
+div.messages,
+div[role=success],
+div[role=error] {
+  background-position: 8px 8px;
+  background-repeat: no-repeat;
+  margin: 6px 0;
+  padding: 10px 10px 10px 10px;
+}
+
+div[role=success] {
+  border:1px solid #be7;
+  color: #234600;
+  background-color: #f8fff0;
+}
+
+div[role=error] {
+  border:1px solid #ed541d;
+  background-color: #fef5f1;
+  color: #8c2e0b;
+}
+
+/** FIELD **/
+.views-field.views-field-field-societe {
+  text-align:right;
+}
+
+#custom-promoted-article {
+  border:1px solid #dddddd;
+  padding:10px;
+  margin-bottom:30px;
+}
+#custom-promoted {
+  background-color: #dddddd;
+  text-align: center;
+}
+
+.doverlay{
+  background: none;
+}
+
+/** COMMENT **/
+#edit-field-comment-0-value,
+#edit-field-email-0-value {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width:100%;
+}
+
+.comments{
+  margin-top:40px;
+  border-top:1px solid #dddddd;
+  padding-top:10px;
+}
+
+#comment-form {
+  margin-bottom:20px;
+}
+
+.comment-form .form-item .description {
+  margin:0;
+}
+
+.comment .field--name-field-pseudo {
+  color: #f4473a;
+}
+
+#comment-form {
+  display:none;
+}
+
+#comment-action-link {
+  text-align:center;
+  margin-bottom:20px;
+  margin-top:20px;
+}
+
+/** CAPTCHA **/
+.g-recaptcha {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+/** PAGER **/
+ul.pager__items li.is-active a {
+  text-decoration: none;
+  background-color: #f5f5f5;
+  color:black;
+}
+
+.views-exposed-form {
+  display:none;
+}
+
+.views-field.views-field-field-image img{
+  width:100%;
+}

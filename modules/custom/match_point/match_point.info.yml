@@ -1,0 +1,6 @@
+name: Match point Module
+description: Match point module
+package: Custom
+
+type: module
+core: 8.x

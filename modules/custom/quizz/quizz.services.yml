@@ -1,0 +1,6 @@
+services:
+  quizz.manager:
+   class: Drupal\quizz\QuizzManager
+   arguments: ['@database']
+   tags:
+     - { name: quizz_manager }

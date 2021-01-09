@@ -1,0 +1,7 @@
+bug_report.save:
+  path: '/bug_report/save'
+  defaults:
+    _controller: '\Drupal\bug_report\Controller\BugReportController::save'
+    _title: 'Bug Report save'
+  requirements:
+    _access: 'TRUE'   

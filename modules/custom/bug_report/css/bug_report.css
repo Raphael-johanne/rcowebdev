@@ -1,0 +1,42 @@
+#block-bugreportblock {
+  top:20px;
+  position:fixed;
+  right:-230px;
+  width:275px;
+  background: #2b303b;
+  padding-left: 40px;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor:pointer;
+  z-index: 1;
+}
+
+#bug-report-button {
+  transform: rotate(90deg);
+  transform-origin: left top 0;
+  text-align: right;
+  height: 0;
+  display: block;
+  font-size: 17px;
+}
+
+#bug-report-sub-container {
+  padding:10px;
+}
+
+#bug-report-sub-container textarea,
+#bug-report-sub-container input,
+#bug-report-send
+{
+  width:100%
+}
+
+#bug-report-error,
+#bug-report-success {
+  display:none;
+}
+
+#bug-report-message {
+  height:150px;
+}

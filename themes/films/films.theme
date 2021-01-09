@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the Films theme.
+ */
+ function films_preprocess_field__node__field_video_path_to_file(&$variables) {
+  $variables['language'] = isset($_GET['lang']) ? $_GET['lang'] : null;
+ }
+
+/**
+ * Implements template_preprocess_field__FIELD_NAME().
+ *
+ * MYTHEME_preprocess_field__MYFIELD(&$variables)
+ */
+function films_preprocess_field__node__field_ca_pourrait_vous_interesse(&$variables) {
+    $node = $variables['element']['#object'];
+    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+
+    foreach ($node->get('field_ca_pourrait_vous_interesse') as $film) {
+        $film = $nodeStorage->load($film->target_id);
+        $variables['related'][] = [
+            'id'    => $film->id(),
+            'title'  => $film->getTitle(),
+            'img'   => $film->get('field_image_film')->entity->uri->value
+        ];
+    }
+}

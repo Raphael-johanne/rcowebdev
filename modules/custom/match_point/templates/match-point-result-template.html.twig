@@ -1,0 +1,13 @@
+<ul id="match-point-user">
+    {% for user in users %}
+        <li class="match-point-user">
+            <img height="80px" width="80px" src="{{ file_url('public://downloads') }}/{{ user.picture }}" /> 
+            <span class="match-point-user-row">
+                {{ user.name }}
+            </span> 
+            <span class="match-point-user-row-point">
+                {{ user.points }}
+            </span> 
+        </li>
+    {% endfor %}
+</ul>

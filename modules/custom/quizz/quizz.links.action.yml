@@ -1,0 +1,15 @@
+quizz.edit:
+  route_name: quizz.edit
+  title: 'Add quizz'
+  appears_on:
+    - quizz.overview
+quizz.answer.edit:
+  route_name: quizz.answer.edit
+  title: 'Add answer'
+  appears_on:
+    - quizz.answer.overview
+quizz.question.edit:
+  route_name: quizz.question.edit
+  title: 'Add question'
+  appears_on:
+    - quizz.question.overview

@@ -1,0 +1,9 @@
+search-autocomplete:
+  version: 1.x
+  css:
+    theme:
+      css/search_autocomplete.css: {}
+  js:
+    js/search_autocomplete.js: {}
+  dependencies:
+    - core/jquery  

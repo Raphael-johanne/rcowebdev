@@ -1,0 +1,34 @@
+<?php
+
+function quizz_theme($existing, $type, $theme, $path) {
+  return [
+    'quizz_template' => [
+      'variables' => [
+      	'quizz' => null
+      ],
+    ],
+    'quizz_pseudo_template' => [
+      'variables' => [
+      	'quizz' => null
+      ],
+    ],
+    'quizz_step_template' => [
+      'variables' => [
+        'quizz'  => null
+      ],
+    ],
+    'quizz_result_template' => [
+      'variables' => [
+        'results' => null,
+        'count'   => 0,
+        'total'   => 0
+      ],
+    ],
+    'quizz_admin_result_template' => [
+      'variables' => [
+        'quizz'  => null,
+        'total' => null
+      ],
+    ],
+  ];
+}

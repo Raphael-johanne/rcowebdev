@@ -1,0 +1,9 @@
+bug-report:
+  version: 1.x
+  css:
+    theme:
+      css/bug_report.css: {}
+  js:
+    js/bug_report.js: {}
+  dependencies:
+    - core/jquery  

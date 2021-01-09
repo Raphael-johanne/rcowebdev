@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ *
+ * Available variables:
+ * - label: The label for the field.
+ * - content: Content of the block.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ */
+#}
+{{ label }}
+<ul>
+    {% for item in items %}
+    <li>
+        <a href="/sites/default/files/downloads/{{ item.content }}" download="{{ item.content }}">{{ item.content }}</a>
+    </li>
+    {% endfor %}
+</ul>

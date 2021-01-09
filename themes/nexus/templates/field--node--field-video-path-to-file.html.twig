@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ *
+ * Available variables:
+ * - label: The label for the field.
+ * - content: Content of the block.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ */
+#}
+{% for item in items %}
+  <video width="100%" height="100%" controls>
+    <source src="/sites/default/files/downloads/{{ item.content }}" type="video/webm">
+  Your browser does not support the video tag.
+  </video> 
+{% endfor %}

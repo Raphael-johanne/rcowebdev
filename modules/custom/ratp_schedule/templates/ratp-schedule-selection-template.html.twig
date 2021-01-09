@@ -1,0 +1,57 @@
+<ul>
+    {% for schedule in schedules %}
+        {% if loop.first %}
+            {{ schedule.ratp_schedule_type }}
+        {% endif %}
+        <li><a 
+            href="#" 
+            onclick="update_schedule({{ schedule.ratp_schedule_id }}, '{{ path('ratp_schedule.bus.schedule', { 'id' : schedule.ratp_schedule_id }) }}')"
+            >
+            {{ schedule.ratp_schedule_name }}&nbsp;-&nbsp;Departure&nbsp;:&nbsp;{{ schedule.ratp_schedule_station_departure }}
+            </a>
+            </li>
+    {% endfor %}
+</ul>
+
+<table border=1 id="ratp_schedule_results"></table>
+
+<script>
+    var interval = null;
+
+    function update_schedule(id, url) {
+        if (interval !== null) {
+            window.clearInterval(interval);
+        }
+
+        reloadSchedule(id, url);
+        interval = setInterval(function() {
+            reloadSchedule(id, url);
+        }, 30000);
+    }
+
+    function reloadSchedule(id, url) {
+        jQuery("#ratp_schedule_results").css('opacity', 0.5);
+        jQuery.ajax({
+            url: url,
+            context: document.body
+            }).done(function(result) {
+                jQuery("#ratp_schedule_results").empty();
+                jQuery("#ratp_schedule_results").append("<th border=1 colspan=\"2\">" + result.schedule.name + "</th></td>");
+                jQuery.each(result.schedules, function(index, item) {
+                    createRow(item);
+                });
+                jQuery("#ratp_schedule_results").css('opacity', 1);
+            });
+    }
+    
+    function createRow(item) {
+        if (item.station == null || item.time == null) {
+            return;
+        }
+
+        const tr    = jQuery("<tr></tr>")
+        tr.append("<td>" + item.station + "</td><td>" + item.time + "</td>");
+        jQuery("#ratp_schedule_results").append(tr);
+    }
+
+</script>

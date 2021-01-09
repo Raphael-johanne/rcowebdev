@@ -1,0 +1,5 @@
+ratp_schedule.overview:
+  route_name: ratp_schedule.schedule.edit
+  title: 'Add schedule'
+  appears_on:
+    - ratp_schedule.overview

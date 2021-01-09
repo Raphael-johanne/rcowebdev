@@ -1,0 +1,6 @@
+name: Ratp Schedule Module
+description: Ratp Schedule Module
+package: Custom
+
+type: module
+core: 8.x

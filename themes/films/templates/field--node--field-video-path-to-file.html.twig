@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ *
+ * Available variables:
+ * - label: The label for the field.
+ * - content: Content of the block.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ */
+#}
+Téléchargement<br />
+{% for item in items %}
+  {% set videos = item.content['#text']|split('/') %}
+  {% set webm = videos|first %}
+  <ul>
+    <li id="test">Film:&nbsp;<a href="/sites/default/files/downloads/{{ webm }}" download="{{ webm }}">{{ webm }}</a><br /></li>
+    {% if element['#object'].field_subtitle_fr.value %}
+      <li>
+      Sub FR:&nbsp;<a href="/sites/default/files/downloads/{{ element['#object'].field_subtitle_fr.value }}" download="{{ element['#object'].field_subtitle_fr.value }}">{{ element['#object'].field_subtitle_fr.value }}</a>
+      </li>
+    {% endif %}
+    {% if element['#object'].field_subtitle_en.value %}
+      <li>
+      Sub EN:&nbsp;<a href="/sites/default/files/downloads/{{ element['#object'].field_subtitle_en.value }}" download="{{ element['#object'].field_subtitle_en.value }}">{{ element['#object'].field_subtitle_en.value }}</a>
+      </li>
+    {% endif %}
+  </ul>
+  <div id="video-custom-toolbar">
+    <video id="film-video-tag" width="100%" height="100%" controls>
+      <source src="/sites/default/files/downloads/{{ webm }}" type="video/webm" />
+       <a href="/sites/default/files/downloads/{{ webm }}" download>Download video</a>
+      {% if element['#object'].field_subtitle_fr.value %}
+        <track label="French" kind="subtitles" srclang="fr" src="/sites/default/files/downloads/{{ element['#object'].field_subtitle_fr.value }}" default>
+      {% endif %}
+      {% if element['#object'].field_subtitle_en.value %}
+        <track label="English" kind="subtitles" srclang="en" src="/sites/default/files/downloads/{{ element['#object'].field_subtitle_en.value }}">
+      {% endif %}
+      
+    Your browser does not support the video tag.
+    </video> 
+  </div>
+{% endfor %}

@@ -1,0 +1,6 @@
+name: Deploy Module
+description: Provide interface to deploy site
+package: Custom
+
+type: module
+core: 8.x

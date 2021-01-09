@@ -1,0 +1,5 @@
+name: Save and Edit
+description: Save and Edit functionnality
+package: Custom
+type: module
+core: 8.x

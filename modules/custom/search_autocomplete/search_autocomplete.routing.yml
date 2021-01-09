@@ -1,0 +1,7 @@
+search_autocomplete.save:
+  path: '/search_autocomplete/save'
+  defaults:
+    _controller: '\Drupal\search_autocomplete\Controller\SearchAutocompleteController::save'
+    _title: 'Search autocomplete'
+  requirements:
+    _access: 'TRUE'   

@@ -1,0 +1,5 @@
+name: Bug Report Module
+description: Bug report module
+package: Custom
+type: module
+core: 8.x

@@ -1,0 +1,334 @@
+/*-------------------------------------------*
+/* Tabs and Tags
+/*-------------------------------------------*/
+.field--name-field-taxo {
+  display: flex;
+}
+
+.field--name-field-taxo div.field__label {
+  font-weight: bold;
+}
+
+.field--name-field-taxo div.field__label:after {
+  content: ':';
+}
+
+.field--name-field-taxo{
+  display: flex;
+  margin: 0;
+  list-style: none;
+}
+
+.field--name-field-taxo div{
+  margin: 0 0 0 0.3em;
+  display:inline;
+}
+
+.field--name-field-taxo .field__item {
+  background: #ed564b;
+  text-shadow: none;
+  border-radius: 2px;
+  color: #fff;
+  padding: 2px 6px;
+}
+
+/** MESSAGES **/
+div.warning, table tr.warning {
+  background-color: #fffce5;
+}
+
+div.warning, .warning {
+  color: #840;
+}
+
+div.error, table tr.error {
+  background-color: #fef5f1;
+}
+
+div.error, .error {
+  color: #8c2e0b;
+}
+
+div.error {
+  border-color: #ed541d;
+}
+
+div.warning {
+  border-color: #ed5;
+}
+
+div.messages,
+div[role=success],
+div[role=error] {
+  background-position: 8px 8px;
+  background-repeat: no-repeat;
+  margin: 6px 0;
+  padding: 10px 10px 10px 10px;
+}
+
+div[role=success] {
+  border:1px solid #be7;
+  color: #234600;
+  background-color: #f8fff0;
+}
+
+div[role=error] {
+  border:1px solid #ed541d;
+  background-color: #fef5f1;
+  color: #8c2e0b;
+}
+
+/** FIELD **/
+.views-field.views-field-field-societe {
+  text-align:right;
+}
+
+#custom-promoted-article {
+  border:1px solid #dddddd;
+  padding:10px;
+  margin-bottom:30px;
+}
+#custom-promoted {
+  background-color: #dddddd;
+  text-align: center;
+}
+
+.doverlay{
+  background: none;
+}
+
+/** COMMENT **/
+#edit-field-comment-0-value,
+#edit-field-email-0-value {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width:100%;
+}
+
+.comments{
+  margin-top:40px;
+  border-top:1px solid #dddddd;
+  padding-top:10px;
+}
+
+#comment-form {
+  margin-bottom:20px;
+}
+
+.comment-form .form-item .description {
+  margin:0;
+}
+
+.comment .field--name-field-pseudo {
+  color: #f4473a;
+}
+
+#comment-form {
+  display:none;
+}
+
+#comment-action-link {
+  text-align:center;
+  margin-bottom:20px;
+  margin-top:20px;
+}
+
+/** CAPTCHA **/
+.g-recaptcha {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+/** PAGER **/
+ul.pager__items li{
+  color:black;
+}
+
+ul.pager__items li.is-active a {
+  text-decoration: none;
+  background-color: #f5f5f5;
+  color:black;
+}
+ul.pager__items li a:hover {
+  color:black;
+}
+
+.pager li>a, .pager li>span {
+  color:#fff;
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #2b303b;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.messages.warning {
+  background-color: #2b303b;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  color:white;
+}
+
+/** VIEW LIST **/
+#block-quelquesinfos-2 ul,
+#block-films-testgender ul,
+#block-views-block-latest-additions-block-1 ul,
+#block-films-views-block-relative-content-block-1-2 ul,
+#block-views-block-duplicate-of-relative-content-for-films-block-1 ul,
+ul.node-teaser{
+  list-style: none; 
+  margin:0;
+}
+
+ul.node-teaser img{
+  width:100%;
+}
+
+.site-branding.col-sm-6 {
+    width: 100%;
+}
+
+.site-branding.col-sm-6 img {
+  object-fit: cover;
+  object-position: -20% 0;
+  width: 100%;
+  height: 337px;
+  display: block;
+} 
+
+img.film-node {
+  width: 100%;
+}
+
+#block-films-site-branding a {
+  float:right;
+  width: 100%;
+}
+
+/** MATCH POINT **/
+#match-point-user {
+  text-align: center;
+  list-style: none;
+  padding:0;
+  margin:0;
+}
+
+#match-point-user li{
+  display:block;
+  position:relative;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #DDDDDD;
+  margin-bottom: 15px;
+}
+
+.match-point-user img{
+  border-radius: 50%;
+  display: inline;
+}
+
+.match-point-user-row{
+  display:block;
+}
+
+.match-point-user-row-point {
+  font-size: 25px;
+  font-weight: bold;
+  color:#f4473a;
+}
+
+#block-matchpointblock {
+  text-align: center;
+}
+
+.quizz-answer {
+  color:#f4473a;
+}
+
+#quizz-result {
+  list-style: decimal;
+}
+
+#quizz-score-container {
+  width:100%;
+  text-align:center;
+  font-size: 25px;
+}
+
+#quizz-score,
+.views-field.views-field-field-language {
+  font-weight: bold;
+  color: #f4473a;
+}
+
+.quizz-bad-answer{
+  text-decoration: line-through;
+}
+
+.js-form-item-sort-by,
+.js-form-item-sort-order {
+  display: block;
+  float:left;
+}
+
+.form-actions {
+  padding:0;
+}
+.js-form-item-sort-order,
+#edit-submit-taxonomy-term {
+  margin-left: 20px;
+}
+
+#mini-custom-pager{
+  display:block;
+  width:100%;
+  float:left;
+}
+
+#block-views-block-duplicate-of-relative-content-for-films-block-1 ul.js-pager__items li{
+  float:left;
+}
+
+.mini-custom-pager-next-link {
+  display:block;
+  margin-left:20px;
+}
+
+.views-field.views-field-field-image img{
+  width:100%;
+}
+
+#block-films-content video, 
+#block-films-content img{
+  margin-top:20px;
+}
+
+#block-films-content img{
+  margin-bottom:20px;
+
+}
+
+/** RELATED FILMS **/
+.press {
+  display: block;  /* Remove bullet points; allow greater control of positioning */
+  padding: 0;      /* Override defaults for lists */
+  margin: 0;       /* Override defaults for lists */
+  width: 100%;     /* Get the row full width */
+}
+
+#block-films-content .press img{
+  height: 150px;
+}
+
+.press li {
+  display: inline-block; /* Get all images to show in a row */
+  width: 33%;            /* Show 4 logos per row */
+  text-align: center;    /* Centre align the images */
+}
+
+@media (max-width: 960px) and (min-width: 501px) {
+  .press li { width: 50%; } /* Show 2 logos per row on medium devices (tablets, phones in landscape) */
+}
+
+@media (max-width: 500px) {
+  .press li { width: 100%; } /* On small screens, show one logo per row */
+}

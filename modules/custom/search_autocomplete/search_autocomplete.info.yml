@@ -1,0 +1,5 @@
+name: Search autocomplete Module
+description: Search autocomplete module
+package: Custom
+type: module
+core: 8.x

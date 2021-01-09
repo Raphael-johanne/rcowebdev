@@ -1,0 +1,11 @@
+<?php
+
+function match_point_theme($existing, $type, $theme, $path) {
+  return [
+    'match_point_result_template' => [
+      'variables' => [
+      	'users' => []
+      ],
+    ],
+  ];
+}

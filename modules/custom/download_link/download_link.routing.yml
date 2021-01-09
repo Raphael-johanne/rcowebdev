@@ -1,0 +1,7 @@
+download_link.download.overview:
+  path: '/download_link/{fileName}'
+  defaults:
+    _controller: '\Drupal\download_link\Controller\DownloadController::download'
+    _title: 'Download link'
+  requirements:
+    _access: 'TRUE'  

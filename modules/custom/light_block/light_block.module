@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function light_block_theme() {
+  return array(
+   'light_block_block' => array(
+            'variables' => array('content' => NULL),
+            'template' => 'block--light-block',
+        ),
+  );
+}

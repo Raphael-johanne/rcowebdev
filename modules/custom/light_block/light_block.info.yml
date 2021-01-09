@@ -1,0 +1,6 @@
+name: Light block Module
+description: Provide a light block for head content
+package: Custom
+
+type: module
+core: 8.x

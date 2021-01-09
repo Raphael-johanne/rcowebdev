@@ -1,0 +1,116 @@
+quizz.pseudo:
+  path: '/quizz'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzController::pseudo'
+    _title: "Quizz (alpha)"
+  requirements:
+    _access: 'TRUE'
+  options:
+    no_cache: 'TRUE'  
+quizz.pseudo.save:
+  path: '/quizz/pseudo/savePseudo'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzController::savePseudo'
+    _title: "Quizz (alpha)"
+  requirements:
+    _access: 'TRUE' 
+  options:
+    no_cache: 'TRUE'  
+quizz.view:
+  path: '/quizz/view/{questionId}'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzController::view'
+    _title: "Quizz (alpha)"
+  requirements:
+    _access: 'TRUE' 
+  options:
+    no_cache: 'TRUE'  
+quizz.result:
+  path: '/quizz/result'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzController::result'
+    _title: "Quizz (alpha)"
+  requirements:
+    _access: 'TRUE' 
+  options:
+    no_cache: 'TRUE' 
+quizz.save:
+  path: '/quizz_result/save/{question_id}/{answer_id}'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzController::save'
+    _title: 'quizz result save'
+  requirements:
+    _access: 'TRUE'   
+quizz.overview:
+  path: '/admin/quizz/list'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuizzManageController::overview'
+    _title: 'quizz'
+  requirements:
+    _permission: 'administer quizz'
+quizz.edit:
+  path: '/admin/quizz/edit/{id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Quizz\EditForm'
+    _title: 'Quizz edit'
+    id: null
+  requirements:
+    _permission: 'administer quizz'
+quizz.question.overview:
+  path: '/admin/quizz/question'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\QuestionController::overview'
+    _title: 'quizzs'
+  requirements:
+    _permission: 'administer quizz'
+quizz.question.edit:
+  path: '/admin/quizz_question/edit/{id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Question\EditForm'
+    _title: 'quizz Question edit'
+    id: null
+  requirements:
+    _permission: 'administer quizz'
+quizz.question.delete:
+  path: '/admin/quizz_question/delete/{id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Question\DeleteForm'
+    _title: 'quizz Question delete'
+  requirements:
+    _permission: 'administer quizz'    
+quizz.answer.overview:
+  path: '/admin/quizz_answer/list'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\AnswerController::overview'
+    _title: 'quizz Answers'
+  requirements:
+    _permission: 'administer quizz'
+quizz.answer.edit:
+  path: '/admin/quizz_answer/edit/{id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Answer\EditForm'
+    _title: 'quizz Answer edit'
+    id: null
+  requirements:
+    _permission: 'administer quizz'
+quizz.answer.delete:
+  path: '/admin/quizz_answer/delete/{id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Answer\DeleteForm'
+    _title: 'quizz Answer delete'
+  requirements:
+    _permission: 'administer quizz'
+quizz.result.overview:
+  path: '/admin/quizz_result/list'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\ResultController::overview'
+    _title: 'quizz result list'
+  requirements:
+    _permission: 'administer quizz' 
+quizz.result.view:
+  path: '/admin/quizz_result/view/{question_id}'
+  defaults:
+    _controller: '\Drupal\quizz\Controller\ResultController::view'
+    _title: 'quizz Result view'
+  requirements:
+    _permission: 'administer quizz'

@@ -1,0 +1,77 @@
+<?php
+use Drupal\Core\Database\Database;
+
+/**
+* Implements hook_schema().
+*
+* Defines the database tables used by this module.
+*
+* @see hook_schema()
+*
+* @ingroup ratp_schedule
+*/
+function ratp_schedule_schema() {
+  $schema['ratp_schedule'] = [
+    'description' => 'Ratp Schedule',
+    'fields' => [
+      'ratp_schedule_id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'ID',
+      ],
+      'ratp_schedule_name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Name',
+      ],
+      'ratp_schedule_type' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Type',
+      ],
+      'ratp_schedule_number' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Number',
+      ],
+      'ratp_schedule_terminus_1' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Terminus 1',
+      ],
+      'ratp_schedule_terminus_2' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Terminus 2',
+      ],
+      'ratp_schedule_station_departure' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Station departure',
+      ],
+    ],
+    'primary key' => ['ratp_schedule_id']
+  ];
+
+  return $schema;
+}
+
+/**
+* uninstall
+*/
+function ratp_schedule_uninstall() {
+  $db = Database::getConnection()->schema();
+  $db->dropTable('ratp_schedule');
+}

@@ -1,0 +1,4 @@
+services:
+  deploy.import:
+    class: Drupal\deploy\DeployImport
+    public: true

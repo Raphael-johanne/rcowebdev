@@ -1,0 +1,20 @@
+{{ attach_library('bug_report/bug-report') }}
+<div id="bug-report-container">
+    <a id="bug-report-button">Signaler un bug</a>
+    <div id="bug-report-sub-container">
+        <p>
+            Un bug, un film manquant ou en trop mauvaise qualité, des sous-titres nons synchronisés ... N'hésitez pas à m'envoyer un petit message, je tâcherai de corriger le soucis
+        </p>
+        <form>
+            <input type="text" id="bug-report-email" placeholder="Votre adresse Email"/>
+            <textarea id="bug-report-message" placeholder="Taper votre message..."></textarea>
+        </form>
+        <button data="{{ path('bug_report.save', {}) }}" id="bug-report-send">envoyer</button>
+    </div>
+    <div id="bug-report-error">
+        {{error_message}}
+    </div>    
+    <div id="bug-report-success">
+        {{success_message}}
+    </div>
+</div>

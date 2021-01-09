@@ -1,0 +1,56 @@
+<?php
+use Drupal\Core\Database\Database;
+
+/**
+* Implements hook_schema().
+*
+* Defines the database tables used by this module.
+*
+* @see hook_schema()
+*
+* @ingroup match_point
+*/
+function match_point_schema() {
+  $schema['match_point_user'] = [
+    'description' => 'Mactch points users',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'User label',
+      ],
+      'picture' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'User picture',
+      ],
+      'points' => [
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'User points',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  return $schema;
+}
+
+/**
+* uninstall
+*/
+function match_point_uninstall() {
+  $db = Database::getConnection()->schema();
+  $db->dropTable('match_point_user');
+}
