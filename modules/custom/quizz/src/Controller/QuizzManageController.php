@@ -1,40 +1,39 @@
 <?php
 
 namespace Drupal\quizz\Controller;
-
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
+use Drupal\Quizz\QuizzManager;
 /**
  *  Manage quizz controller.
  */
 class QuizzManageController extends ControllerBase {
 
   /**
-   * The database connection.
+   * $quizzManager Quizz Manager
+
    *
-   * @var \Drupal\Core\Database\Connection
+   * @var \Drupal\Quizz\QuizzManager
    */
-  protected $connection;
+  protected $quizzManager;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database')
+      $container->get('quizz.manager')
     );
   }
 
   /**
    * Construct
    *
-   * @param \Drupal\Core\Database\Connection $databaseConnection
+   * @param \Drupal\Quizz\QuizzManager $quizzManager  Quizz Manager
    */
-  public function __construct(Connection $connection) {
-    $this->connection = $connection;
+  public function __construct(QuizzManager $quizzManager) {
+    $this->quizzManager = $quizzManager;
   }
 
   /**
@@ -47,12 +46,17 @@ class QuizzManageController extends ControllerBase {
     $header = [
       [
         'data'  => $this->t('ID'),
-        'field' => 'pa.id',
+        'field' => 'id',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
         'data'  => $this->t('Name'),
-        'field' => 'pa.name',
+        'field' => 'name',
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ],
+      [
+        'data'  => $this->t('Available'),
+        'field' => 'available',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
@@ -61,13 +65,25 @@ class QuizzManageController extends ControllerBase {
       ],
     ];
 
+    foreach ($this->quizzManager->getQuizzs() as $quizz) {
+      $rows[] = [
+        'data' => [
+          $quizz->id,
+            $this->t($quizz->name),
+            $this->t($quizz->available),
+            $this->l($this->t('Edit'), new Url('quizz.edit', ['quizz_id' => $quizz->id])),
+            $this->l($this->t('Results'), new Url('quizz.result.overview', ['quizz_id' => $quizz->id])),
+            $this->l($this->t('Delete'), new Url('quizz.delete', ['quizz_id' => $quizz->id])),
+        ]
+      ];
+    }
+
     $build['quizz_table'] = [
       '#type' 	=> 'table',
       '#header' => $header,
       '#rows' 	=> $rows,
       '#empty' 	=> $this->t('No quizz available.'),
     ];
-    $build['quizz_pager'] = ['#type' => 'pager'];
 
     return $build;
   }
