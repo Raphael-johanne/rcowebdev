@@ -18,11 +18,11 @@ class DeleteForm extends ConfirmFormBase {
 	protected $connection;
 
 	/**
-	 * Answer to delete
+	 * quizz to delete
 	 *
 	 * @var int
 	 */
-	protected $answerId = null;
+	protected $quizzId = null;
 
 	/**
 	 * Constructs
@@ -68,8 +68,8 @@ class DeleteForm extends ConfirmFormBase {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function buildForm(array $form, FormStateInterface $form_state, $id = null) {
-		$this->answerId = $id;
+	public function buildForm(array $form, FormStateInterface $form_state, $quizz_id = null) {
+		$this->quizzId = $quizz_id;
 		return parent::buildForm($form, $form_state);
 	}
 
@@ -77,21 +77,22 @@ class DeleteForm extends ConfirmFormBase {
 	 * {@inheritdoc}
 	 */
 	public function submitForm(array &$form, FormStateInterface $form_state) {
-		try {
-			$this->connection->delete('quizz_question_answer')
-				->condition('answer_id', $this->answerId)
-				->execute();
+	
+		$this->connection->delete('quizz_quizz_question')
+			->condition('quizz_id', $this->quizzId)
+			->execute();
 
-			$this->connection->delete('quizz_answer')
-				->condition('id', $this->answerId)
-				->execute();
+		$this->connection->delete('quizz_result')
+		->condition('quizz_id', $this->quizzId)
+		->execute();
 
-			$this->messenger()->addMessage($this->t('The answer has been deleted'));
-		} catch (\Exception $e) {
-			$this->messenger()->addMessage($this->t('You cannot removed answer already populated in quizz results'), 'error');
-		}
+		$this->connection->delete('quizz')
+			->condition('id', $this->quizzId)
+			->execute();
+
+		$this->messenger()->addMessage($this->t('The quizz has been deleted'));
 		
-		$response = Url::fromRoute('quizz.answer.overview');
+		$response = Url::fromRoute('quizz.overview');
 		$form_state->setRedirectUrl($response); 
 	}
 }

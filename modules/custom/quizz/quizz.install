@@ -40,13 +40,6 @@ function quizz_schema() {
         'default' => '',
         'description' => 'Good Answer ID',
       ],
-      'quizz_id' => [
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => FALSE,
-        'default' => '',
-        'description' => 'Quizz ID',
-      ],
     ],
     'primary key' => ['id']
   ];
@@ -84,7 +77,34 @@ function quizz_schema() {
         'not null' => TRUE,
         'default' => '',
         'description' => 'Quizz label',
-      ]
+      ],
+      'available' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Quizz is available',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  $schema['quizz_quizz_question'] = [
+    'description' => 'Quizz Quizz / questions',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'ID',
+      ],
+      'quizz_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Quizz ID',
+      ],
+      'question_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Question ID',
+      ],
     ],
     'primary key' => ['id']
   ];
@@ -127,6 +147,11 @@ function quizz_schema() {
         'not null' => TRUE,
         'description' => 'Result ID',
       ],
+      'quizz_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Quizz ID',
+      ],
       'answer_id' => [
         'type' => 'int',
         'not null' => TRUE,
@@ -161,8 +186,11 @@ function quizz_schema() {
 */
 function quizz_uninstall() {
   $db = Database::getConnection()->schema();
+
   $db->dropTable('quizz_question');
   $db->dropTable('quizz_answer');
   $db->dropTable('quizz_question_answer');
   $db->dropTable('quizz_result');
+  $db->dropTable('quizz_quizz_question');
+  $db->dropTable('quizz');
 }

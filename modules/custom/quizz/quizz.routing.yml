@@ -2,7 +2,7 @@ quizz.pseudo:
   path: '/quizz'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::pseudo'
-    _title: "Quizz (alpha)"
+    _title: "Quizz"
   requirements:
     _access: 'TRUE'
   options:
@@ -11,7 +11,7 @@ quizz.pseudo.save:
   path: '/quizz/pseudo/savePseudo'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::savePseudo'
-    _title: "Quizz (alpha)"
+    _title: "Quizz"
   requirements:
     _access: 'TRUE' 
   options:
@@ -20,7 +20,7 @@ quizz.view:
   path: '/quizz/view/{questionId}'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::view'
-    _title: "Quizz (alpha)"
+    _title: "Quizz"
   requirements:
     _access: 'TRUE' 
   options:
@@ -29,7 +29,7 @@ quizz.result:
   path: '/quizz/result'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::result'
-    _title: "Quizz (alpha)"
+    _title: "Quizz"
   requirements:
     _access: 'TRUE' 
   options:
@@ -49,11 +49,11 @@ quizz.overview:
   requirements:
     _permission: 'administer quizz'
 quizz.edit:
-  path: '/admin/quizz/edit/{id}'
+  path: '/admin/quizz/edit/{quizz_id}'
   defaults:
     _form: '\Drupal\quizz\Form\Quizz\EditForm'
     _title: 'Quizz edit'
-    id: null
+    quizz_id: null
   requirements:
     _permission: 'administer quizz'
 quizz.question.overview:
@@ -100,17 +100,24 @@ quizz.answer.delete:
     _title: 'quizz Answer delete'
   requirements:
     _permission: 'administer quizz'
+quizz.delete:
+  path: '/admin/quizz/delete/{quizz_id}'
+  defaults:
+    _form: '\Drupal\quizz\Form\Quizz\DeleteForm'
+    _title: 'quizz delete'
+  requirements:
+    _permission: 'administer quizz'
 quizz.result.overview:
-  path: '/admin/quizz_result/list'
+  path: '/admin/quizz_result/list/{quizz_id}'
   defaults:
     _controller: '\Drupal\quizz\Controller\ResultController::overview'
     _title: 'quizz result list'
   requirements:
     _permission: 'administer quizz' 
-quizz.result.view:
-  path: '/admin/quizz_result/view/{question_id}'
-  defaults:
-    _controller: '\Drupal\quizz\Controller\ResultController::view'
-    _title: 'quizz Result view'
-  requirements:
-    _permission: 'administer quizz'
+#quizz.result.view:
+#  path: '/admin/quizz_result/view/{question_id}'
+#  defaults:
+#    _controller: '\Drupal\quizz\Controller\ResultController::view'
+#    _title: 'quizz Result view'
+#  requirements:
+#    _permission: 'administer quizz'

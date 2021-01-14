@@ -185,10 +185,7 @@ class EditForm extends FormBase {
             ]);
         }
         
-
         $query->execute();
-
-        //var_dump($answers);die;
 
         $response = Url::fromRoute('quizz.question.overview');
         $form_state->setRedirectUrl($response);

@@ -2,163 +2,111 @@
 
 namespace Drupal\quizz\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\quizz\quizzManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Result controller.
+ * Question controller.
  */
 class ResultController extends ControllerBase {
 
   /**
-   * @var Drupal\quizz\quizzManager
-   */
-  protected $quizzManager;
-
-  /**
-   * @var Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Construct
+   * The database connection.
    *
-   * @param \Drupal\quizz\quizzManager                       $quizzManager  quizz Manager
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack Request stack
+   * @var \Drupal\Core\Database\Connection
    */
-  public function __construct(
-    quizzManager $quizzManager,
-    RequestStack $requestStack
-  ) {
-
-    $this->quizzManager    = $quizzManager;
-    $this->requestStack   = $requestStack;
-  }
+  protected $connection;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('quizz.manager'),
-      $container->get('request_stack')
+      $container->get('database')
     );
   }
-  
+
   /**
-   * Overview
+   * Construct
+   *
+   * @param \Drupal\Core\Database\Connection $databaseConnection
+   */
+  public function __construct(Connection $connection) {
+    $this->connection = $connection;
+  }
+
+  /**
+   * overview
    *
    * @return array
    */
-  public function overview() {
-
-    $rows = [];
+  public function overview($quizz_id) {
 
     $header = [
       [
-        'data' => $this->t('ID'),
+        'data' => $this->t('Pseudo'),
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
-        'data' => $this->t('Name'),
+        'data' => $this->t('Given answer'),
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
-        'data' => $this->t('Operations'),
-        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      ]
+        'data' => $this->t('Good Answer'),
+        'class' => [RESPONSIVE_PRIORITY_LOW],
+      ],
     ];
 
-    foreach ($this->quizzManager->getQuestions() as $quizzQuestion) {
-      $rows[] = [
+    $query = $this->connection->select('quizz_result', 'qr');
+    $query->innerJoin('quizz_answer', 'qa', 'qr.answer_id = qa.id');
+    $query->innerJoin('quizz_question', 'qq', 'qr.question_id = qq.id');
+    $query->innerJoin('quizz_answer', 'qa2', 'qq.quizz_good_answer_id = qa2.id');
+    $query->fields('qr', [
+      'ip',
+      'pseudo',
+      'answer_id'
+    ]);
+    $query->fields('qa', [
+      'name'
+    ]);
+    $query->fields('qa2', [
+      'name'
+    ]);
+    $query->fields('qq', [
+      'quizz_good_answer_id'
+    ]);
+    $query->condition('qr.quizz_id', $quizz_id);
+
+    $users  = $query->execute();
+
+    foreach ($users as $user) {
+      if (!isset($rows[$user->ip.$user->pseudo]['total'])) {
+        $rows[$user->ip.$user->pseudo]['total'] = 0;
+      }
+
+      $rows[$user->ip.$user->pseudo]['total'] += ($user->answer_id != $user->quizz_good_answer_id) ? 0 : 1;
+
+      $rows[$user->ip.$user->pseudo]['value'][] = [
         'data' => [
-          $quizzQuestion->id,
-            $this->t($quizzQuestion->name),
-            $this->l($this->t('View result'), new Url('quizz.result.view', ['question_id' => $quizzQuestion->id])),
+          $user->pseudo,
+          $user->name,
+          $user->qa2_name,
         ]
       ];
     }
 
-    $build['quizz_question_table'] = [
-      '#type'   => 'table',
-      '#header' => $header,
-      '#rows'   => $rows,
-      '#empty'  => $this->t('No result available.'),
-    ];
+    foreach ($rows as $key => $value) {
+      $build[$key] = [
+        '#type' 	=> 'table',
+        '#header' => $header,
+        '#rows' 	=> $value['value'],
+        '#empty' 	=> $this->t('No result available.'),
+      ];
+    }
 
     return $build;
-  }
-
-  /**
-   * Save
-   *
-   * @param int $question_id
-   * @param int $answer_id
-   */
-  public function save(int $question_id, int $answer_id) {
-    $currentRequest = $this->requestStack->getCurrentRequest();
-    $clientIp       = $currentRequest->getClientIp();
-
-    $errors         = $this->validate($question_id, $answer_id, $clientIp);
-
-    if (!empty($errors)) {
-      foreach ($errors as $error) {
-        \Drupal::messenger()->addMessage($error, 'error');
-      }
-    } else {
-      $this->quizzManager->saveResult($question_id, $answer_id, $clientIp);
-      \Drupal::messenger()->addMessage($this->t('Thank you for your vote'), 'success');
-    }
-
-    $redirectUrl = ($currentRequest->headers->get('referer'))
-    ?: \Drupal\Core\Url::fromRoute('<front>')->toString();
-
-    return new RedirectResponse($redirectUrl);
-  }
-
-  /**
-   * Validate
-   *
-   * @param int    $question_id
-   * @param int    $answer_id
-   * @param string $clientIp
-
-   * @return array
-   */
-  protected function validate(int $question_id, int $answer_id, $clientIp) {
-    $errors = [];
-
-    if ( ! ($this->quizzManager->isAvailable($question_id, $answer_id))) {
-      $errors[] = $this->t('This quizz is not available.');
-    }
-    
-    if ($this->quizzManager->hasquizzed($question_id, $clientIp)) {
-      $errors[] = $this->t('You have already vote for this quizz');
-    }
-
-    return $errors;
-  }
-  /**
-   * view
-   *
-   * @param int $question_id
-   */
-  public function view(int $question_id) {
-    $quizz   = $this->quizzManager->getquizz($question_id);
-    $total  = 0;
-
-    foreach ($quizz['answers'] as $answer) {
-      $total += $answer->nbr;
-    }
-
-    return [
-      '#theme'  => 'quizz_admin_result_template',
-      '#quizz'   => $quizz,
-      '#total'  => $total
-    ];
   }
 }
