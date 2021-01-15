@@ -1,9 +1,14 @@
-{{ quizz.question|e }}
-{% if quizz.picture %}
-    <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
-{% endif %}
-<ul>
-    {% for answer in quizz.answers %}
-        <li><a href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">{{ answer.qa_name|e }}</a></li>
-    {% endfor %}
-</ul>
+{{ attach_library('quizz/quizz') }}
+<div id="quizz-step">
+    {{ quizz.question|e }}
+    {% if quizz.picture %}
+        <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
+    {% endif %}
+    <ul>
+        {% for answer in quizz.answers %}
+            <li><a class="text-entry quizz-answers" href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">{{ answer.qa_name|e }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="#" class="text-entry" id="quizz-valid-step">{{ 'Valid'|t }}</a>
+</div>
+
