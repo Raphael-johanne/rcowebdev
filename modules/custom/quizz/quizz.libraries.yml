@@ -1,0 +1,9 @@
+quizz:
+  version: 1.x
+  css:
+    theme:
+      css/quizz.css: {}
+  js:
+    js/quizz.js: {}
+  dependencies:
+    - core/jquery  

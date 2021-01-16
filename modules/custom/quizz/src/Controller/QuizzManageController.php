@@ -41,8 +41,6 @@ class QuizzManageController extends ControllerBase {
    */
   public function overview() {
 
-    $rows = [];
-
     $header = [
       [
         'data'  => $this->t('ID'),
@@ -65,19 +63,39 @@ class QuizzManageController extends ControllerBase {
       ],
     ];
 
+    $rows = [];
     foreach ($this->quizzManager->getQuizzs() as $quizz) {
-      $rows[] = [
-        'data' => [
-          $quizz->id,
-            $this->t($quizz->name),
-            $this->t($quizz->available),
-            $this->l($this->t('Edit'), new Url('quizz.edit', ['quizz_id' => $quizz->id])),
-            $this->l($this->t('Results'), new Url('quizz.result.overview', ['quizz_id' => $quizz->id])),
-            $this->l($this->t('Delete'), new Url('quizz.delete', ['quizz_id' => $quizz->id])),
-        ]
+      $links = [];
+      
+      $row = [
+        $quizz->id,
+        $quizz->name,
+        $quizz->available
       ];
-    }
 
+      $links['edit'] = [
+        'title' => $this->t('Edit'),
+        'url'   => Url::fromRoute('quizz.edit', ['quizz_id' => $quizz->id]),
+      ];
+      $links['results'] = [
+        'title' => $this->t('Results'),
+        'url'   => Url::fromRoute('quizz.result.overview', ['quizz_id' => $quizz->id]),
+      ];
+      $links['delete'] = [
+        'title' => $this->t('Delete'),
+        'url'   => Url::fromRoute('quizz.delete', ['quizz_id' => $quizz->id]),
+      ];
+
+      $row[] = [
+        'data' => [
+          '#type'   => 'operations',
+          '#links'  => $links,
+        ],
+      ];
+      
+      $rows[] = $row;
+    }
+  
     $build['quizz_table'] = [
       '#type' 	=> 'table',
       '#header' => $header,

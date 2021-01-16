@@ -1,5 +1,5 @@
-<form method="POST" action="{{ path('quizz.pseudo.save') }}">
-    <label for="pseudo">Pseudo</label>
-    <input type="text" id="pseudo" name="quizz[pseudo]"/>
-    <input type="submit" value="Submit" />
+{{ attach_library('quizz/quizz') }}
+<form id="quizz-pseudo" method="POST" action="{{ path('quizz.pseudo.save') }}">
+    <input class="text-entry" type="text" id="pseudo" name="quizz[pseudo]" placeholder="{{ 'Enter a pseudo...'|t }}" autocomplete="off"/>
+    <a href="#" class="text-entry" id="quizz-valid-pseudo">{{ 'Valid'|t }}</a>
 </form>
