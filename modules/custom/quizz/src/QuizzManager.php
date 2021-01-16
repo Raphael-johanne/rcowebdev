@@ -188,7 +188,6 @@ class QuizzManager implements quizzManagerInterface {
     $query->fields('qq', ['id', 'name', 'quizz_good_answer_id']);
     $query->fields('qa', ['id', 'name']);
     $query->fields('qa2', ['id', 'name']);
-    // var_dump($query->__toString());die;
     return $query->execute()
       ->fetchAll();
   }

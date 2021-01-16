@@ -192,8 +192,7 @@ class QuizzController extends ControllerBase {
         $result->good_answer = false;
       }
     }
-    //var_dump($total,count($questions));
-    //die('fin');
+
     if ($total !== count($questions)) {
       \Drupal::messenger()->addMessage('Quizz: Cheater !', 'error');
       return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());

@@ -79,14 +79,31 @@ class QuestionController extends ControllerBase {
       ->execute();
 
     foreach ($quizzQuestions as $quizzQuestion) {
-      $rows[] = [
-        'data' => [
-        	$quizzQuestion->id,
-          	$this->t($quizzQuestion->name),
-          	$this->l($this->t('Edit'), new Url('quizz.question.edit', ['id' => $quizzQuestion->id])),
-            $this->l($this->t('Delete'), new Url('quizz.question.delete', ['id' => $quizzQuestion->id]))
-        ]
+      $links = [];
+      
+      $row = [
+        $quizzQuestion->id,
+        $quizzQuestion->name
       ];
+
+      $links['edit'] = [
+        'title' => $this->t('Edit'),
+        'url'   => Url::fromRoute('quizz.question.edit', ['id' => $quizzQuestion->id]),
+      ];
+
+      $links['delete'] = [
+        'title' => $this->t('Delete'),
+        'url'   => Url::fromRoute('quizz.question.delete', ['id' => $quizzQuestion->id]),
+      ];
+
+      $row[] = [
+        'data' => [
+          '#type'   => 'operations',
+          '#links'  => $links,
+        ],
+      ];
+
+      $rows[] = $row;
     }
 
     $build['quizz_question_table'] = [
