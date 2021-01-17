@@ -39,4 +39,11 @@ a.text-entry:hover  {
 #quizz-step #quizz-valid-step{
   float:right;
   margin-top:20px;
+  padding: 5px 20px;
+}
+
+i.fa.fa-spinner.fa-spin {
+  display:none;
+  margin-left: -12px;
+  margin-right: 8px;
 }

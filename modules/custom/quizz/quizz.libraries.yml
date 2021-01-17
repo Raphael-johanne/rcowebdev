@@ -3,6 +3,7 @@ quizz:
   css:
     theme:
       css/quizz.css: {}
+      https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css: { type: external }
   js:
     js/quizz.js: {}
   dependencies:

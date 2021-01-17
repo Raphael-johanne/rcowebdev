@@ -127,11 +127,6 @@ class QuizzController extends ControllerBase {
       return new RedirectResponse($redirectUrl);
     }
     
-   /*
-    echo '<pre>';
-    var_dump($question);
-    echo '</pre>';
-    */
     $build['quizz_question_pseudo'] = [
       '#theme'    => 'quizz_step_template',
       '#quizz' => $question,
@@ -195,7 +190,7 @@ class QuizzController extends ControllerBase {
 
     if ($total !== count($questions)) {
       \Drupal::messenger()->addMessage('Quizz: Cheater !', 'error');
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());
+      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
     }
 
     $build['quizz_qresult'] = [

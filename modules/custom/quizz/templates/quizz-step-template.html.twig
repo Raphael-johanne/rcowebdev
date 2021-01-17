@@ -6,8 +6,13 @@
     {% endif %}
     <ul>
         {% for answer in quizz.answers %}
-            <li><a class="text-entry quizz-answers" href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">{{ answer.qa_name|e }}</a></li>
+            <li>
+
+                <a class="text-entry quizz-answers" href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">
+                    {{ answer.qa_name|e }}
+                </a>
+            </li>
         {% endfor %}
     </ul>
-    <a href="#" class="text-entry" id="quizz-valid-step">{{ 'Valid'|t }}</a>
+    <a href="#" class="text-entry" id="quizz-valid-step"><i class="fa fa-spinner fa-spin"></i>{{ 'Valid'|t }}</a>
 </div>
