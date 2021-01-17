@@ -16,7 +16,8 @@
             /**
              * steps quizz
              */
-            let selected = null;
+            let selected    = null;
+            let validated   = true;
 
             $('.quizz-answers').each(function(index, item) {
                 $(this).click(function(event){
@@ -38,7 +39,11 @@
                     $.colorbox({html:"An answer is mandatory !"});
                     return false;
                 }
-                window.location = $(selected).attr('href');
+                if (validated === true) {
+                    $('i.fa.fa-spinner.fa-spin').css('display', 'inline-block');
+                    window.location = $(selected).attr('href');
+                    validated = false;
+                }
             });
         }}
 })(jQuery);

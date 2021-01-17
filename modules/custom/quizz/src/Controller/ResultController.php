@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Question controller.
@@ -44,10 +45,22 @@ class ResultController extends ControllerBase {
    * @return array
    */
   public function overview($quizz_id) {
-
+    $rows   = [];
     $header = [
       [
+        'data' => $this->t('#'),
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ],
+      [
         'data' => $this->t('Pseudo'),
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ],
+      [
+        'data' => $this->t('Ip'),
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ],
+      [
+        'data' => $this->t('Question'),
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
@@ -56,7 +69,7 @@ class ResultController extends ControllerBase {
       ],
       [
         'data' => $this->t('Good Answer'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
     ];
 
@@ -76,29 +89,48 @@ class ResultController extends ControllerBase {
       'name'
     ]);
     $query->fields('qq', [
-      'quizz_good_answer_id'
+      'quizz_good_answer_id',
+      'name'
     ]);
     $query->condition('qr.quizz_id', $quizz_id);
 
     $users  = $query->execute();
+    
+    $prevKey = null;  
 
     foreach ($users as $user) {
-      if (!isset($rows[$user->ip.$user->pseudo]['total'])) {
-        $rows[$user->ip.$user->pseudo]['total'] = 0;
+      $key = preg_replace('/\s+/', '', $user->ip.$user->pseudo);
+      
+      if (is_null($prevKey) || $prevKey != $key) {
+        $prevKey = $key;
+        $i = 0;
       }
 
-      $rows[$user->ip.$user->pseudo]['total'] += ($user->answer_id != $user->quizz_good_answer_id) ? 0 : 1;
+      if (!isset($rows[$key]['total'])) {
+        $rows[$key]['total'] = 0;
+      }
 
-      $rows[$user->ip.$user->pseudo]['value'][] = [
+      $rows[$key]['total'] += ($user->answer_id != $user->quizz_good_answer_id) ? 0 : 1;
+      $i++;
+      $rows[$key]['value'][] = [
         'data' => [
+          $i,
           $user->pseudo,
+          $user->ip,
+          $user->qq_name,
           $user->name,
           $user->qa2_name,
         ]
       ];
     }
 
+    if (empty($rows)) {
+        \Drupal::messenger()->addMessage('No result for this quizz for the moment', 'error');
+        return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.overview')->toString());
+    }
+
     foreach ($rows as $key => $value) {
+      
       $build[$key] = [
         '#type' 	=> 'table',
         '#header' => $header,
@@ -106,7 +138,7 @@ class ResultController extends ControllerBase {
         '#empty' 	=> $this->t('No result available.'),
       ];
     }
-
+    
     return $build;
   }
 }
