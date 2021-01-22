@@ -1,0 +1,6 @@
+name: Video Preload
+description: Video preloader if user has beginned to watch it (HTML 5 video Tag)
+package: Custom
+
+type: module
+core: 8.x

@@ -1,0 +1,17 @@
+#video-preload-container {
+    display:none;
+    text-align:center;
+}
+
+#video-preload-container .text-entry {
+    color: #fff;
+    padding: 5px 14px;
+    background-color: #2b303b;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    outline: none;
+}
+
+#video-preload-container a.text-entry:hover {
+    background-color:#606060;
+}

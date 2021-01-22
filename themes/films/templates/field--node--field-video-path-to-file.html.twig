@@ -15,7 +15,7 @@ Téléchargement<br />
   {% set videos = item.content['#text']|split('/') %}
   {% set webm = videos|first %}
   <ul>
-    <li id="test">Film:&nbsp;<a href="/sites/default/files/downloads/{{ webm }}" download="{{ webm }}">{{ webm }}</a><br /></li>
+    <li>Film:&nbsp;<a href="/sites/default/files/downloads/{{ webm }}" download="{{ webm }}">{{ webm }}</a><br /></li>
     {% if element['#object'].field_subtitle_fr.value %}
       <li>
       Sub FR:&nbsp;<a href="/sites/default/files/downloads/{{ element['#object'].field_subtitle_fr.value }}" download="{{ element['#object'].field_subtitle_fr.value }}">{{ element['#object'].field_subtitle_fr.value }}</a>
