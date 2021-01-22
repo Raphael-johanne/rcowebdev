@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function video_preload_theme($existing, $type, $theme, $path) {
+  return ['preload' => [
+      'variables' => [],
+    ],
+  ];
+}
