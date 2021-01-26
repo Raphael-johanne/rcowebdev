@@ -81,15 +81,33 @@ class UserController extends ControllerBase {
       ->execute();
 
     foreach ($users as $user) {
-      $rows[] = [
-        'data' => [
-        	  $user->id,
-          	$this->t($user->name),
-            $user->points,
-          	$this->l($this->t('Edit'), new Url('match_point.user.edit', ['id' => $user->id])),
-            $this->l($this->t('Delete'), new Url('match_point.user.delete', ['id' => $user->id]))
-        ]
+
+      $links = [];
+      
+      $row = [
+        $user->id,
+        $user->name,
+        $user->points,
       ];
+
+      $links['edit'] = [
+        'title' => $this->t('Edit'),
+        'url'   => Url::fromRoute('match_point.user.edit', ['id' => $user->id]),
+      ];
+
+      $links['delete'] = [
+        'title' => $this->t('Delete'),
+        'url'   => Url::fromRoute('match_point.user.delete', ['id' => $user->id]),
+      ];
+
+      $row[] = [
+        'data' => [
+          '#type'   => 'operations',
+          '#links'  => $links,
+        ],
+      ];
+
+      $rows[] = $row; 
     }
 
     $build['match_point_user_table'] = [
@@ -98,6 +116,7 @@ class UserController extends ControllerBase {
       '#rows' 	=> $rows,
       '#empty' 	=> $this->t('No user available.'),
     ];
+    
     $build['match_point_user_pager'] = ['#type' => 'pager'];
 
     return $build;

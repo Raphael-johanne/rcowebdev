@@ -77,17 +77,12 @@ class DeleteForm extends ConfirmFormBase {
 	 * {@inheritdoc}
 	 */
 	public function submitForm(array &$form, FormStateInterface $form_state) {
-		try {
 
-			$this->connection->delete('match_point_user')
-				->condition('id', $this->userId)
-				->execute();
+		$this->connection->delete('match_point_user')
+			->condition('id', $this->userId)
+			->execute();
 
-			$this->messenger()->addMessage($this->t('The user has been deleted'));
-		} catch (\Exception $e) {
-			// @todo
-			// $this->messenger()->addMessage($this->t('You cannot removed answer already populated in poll results'), 'error');
-		}
+		$this->messenger()->addMessage($this->t('The user has been deleted'));
 		
 		$response = Url::fromRoute('match_point.overview');
 		$form_state->setRedirectUrl($response); 

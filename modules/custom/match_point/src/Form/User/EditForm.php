@@ -8,18 +8,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\match_point\MatchPointManager;
 
 /**
- * Configure answer edit form
+ * Configure user edit form
  */
 class EditForm extends FormBase {
 
     /**
-     * The database connection.
+     * matchPointManager
      *
-     * @var \Drupal\Core\Database\Connection
+     * @var \Drupal\match_point\MatchPointManager
      */
-    protected $connection;
+    protected $matchPointManager;
+
+	/**
+	 * The database connection.
+	 *
+	 * @var \Drupal\Core\Database\Connection
+	 */
+	protected $connection;
 
     /**
      * User id
@@ -31,10 +39,12 @@ class EditForm extends FormBase {
     /**
      * Constructs
      *
-     * @param \Drupal\Core\Database\Connection $connection The database connection
+     * @param \Drupal\match_point\MatchPointManager $matchPointManager
+     * @param \Drupal\Core\Database\Connection      $connection
      */
-    public function __construct(Connection $connection) {
-        $this->connection = $connection;
+    public function __construct(MatchPointManager $matchPointManager, Connection $connection) {
+        $this->matchPointManager    = $matchPointManager;
+        $this->connection           = $connection;
     }
 
     /**
@@ -51,6 +61,7 @@ class EditForm extends FormBase {
      */
     public static function create(ContainerInterface $container) {
         return new static(
+            $container->get('match_point.manager'),
             $container->get('database')
         );
     }
@@ -63,6 +74,8 @@ class EditForm extends FormBase {
     }
 
     /**
+     * build form
+     * 
      * @param array              $form
      * @param FormStateInterface $form_state
      * @param int|null           $answerId
@@ -71,8 +84,8 @@ class EditForm extends FormBase {
      */
     public function buildForm(array $form, FormStateInterface $form_state, $id = null) {
         $this->userId     = $id;
-        $editedUser       = $this->getUser();
-        
+        $editedUser       = $this->matchPointManager->getUserById($this->userId);
+
         if ($id > 0 && !$editedUser) {
             throw new \Exception($this->t('Match point user - The user provided does not exist'));
         }
@@ -117,7 +130,8 @@ class EditForm extends FormBase {
     {
         $toSave     = [
             'name'      => $form_state->getValue('match_point_name'),
-            'points'    => $form_state->getValue('match_point_points')
+            'points'    => $this->getCalculatedPoints($form_state->getValue('match_point_points'))
+            //'points'    => $form_state->getValue('match_point_points')
         ];
 
         $picture    = $form_state->getValue('match_point_picture', 0);
@@ -149,23 +163,44 @@ class EditForm extends FormBase {
     }
 
     /**
-     *
-     * @return mixed
+     * Get calculated points
+     * 
+     * @return int
      */
-    private function getUser() {
-        if (is_null($this->userId))
-            return null;
+    private function getCalculatedPoints($p) {
+        /**
+         * formula
+         * 
+         * p    = current points of user
+         * T    = total points of all users
+         * e    = earn points of current user
+         * v    = value of a point 
+         * nb   = number of players  
+         * 
+         * p = t + ((1-(t/T))/ (nb - v))
+         */
+        $v = 1;
+        $totalPointsInformations = $this->matchPointManager->getTotalPointsInformations();
+        $T  = $totalPointsInformations->total;
+        $nb = $totalPointsInformations->nb;
+        
 
-        return $this->connection->select('match_point_user')
-            ->fields('match_point_user', 
-                [
-                    'name',
-                    'picture',
-                    'points'
-                ]
-            )
-            ->condition('id', $this->userId, "=")
-            ->execute()
-            ->fetchAll()[0];
+        $e = round(
+            $p + ((1 - ($p/$T)) / ($nb - $v))
+        );
+        echo '<pre>';
+        var_dump('e = $p + ((1 - ($p/$T)) / ($nb - $v))');
+        if ($e == $p) {
+            $k = $e == $p;
+            var_dump("e == p ? " . $k);
+            $e += 1;
+        }
+        
+        var_dump("Total points = " . $T);
+        var_dump("Old point = " . $p);
+        var_dump("New point = " . $e);
+        die('KO');  
+        return $e;
     }
+
 }

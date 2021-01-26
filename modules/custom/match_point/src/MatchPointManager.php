@@ -24,6 +24,8 @@ class MatchPointManager implements MatchPointManagerInterface {
   }
   
   /**
+   * get Users
+   * 
    * @return array
    */
   public function getUsers() {
@@ -35,5 +37,36 @@ class MatchPointManager implements MatchPointManagerInterface {
       ->fetchAll();
   }
 
+  /**
+   * get total points
+   * 
+   * @return int|null
+   */
+  public function getTotalPointsInformations() {
+    $query = $this->connection->select('match_point_user', 'mpu');
+    $query->addExpression('SUM(points)', 'total');
+    $query->addExpression('COUNT(id)', 'nb');
+    return $query->execute()
+    ->fetchAll()[0];
+  }
+
+  /**
+   * get user by id
+   * 
+   * @return mixed
+   */
+  public function getUserById($userId) {
+    return $this->connection->select('match_point_user')
+        ->fields('match_point_user', 
+            [
+                'name',
+                'picture',
+                'points'
+            ]
+        )
+        ->condition('id', $userId, "=")
+        ->execute()
+        ->fetchAll()[0];
+  }
 
 }
