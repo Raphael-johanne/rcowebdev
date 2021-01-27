@@ -1,0 +1,6 @@
+name: Protected pages Override
+description: Override Protected pages native module
+package: Custom
+
+type: module
+core: 8.x

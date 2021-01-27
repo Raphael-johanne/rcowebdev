@@ -170,6 +170,7 @@ ul.pager__items li a:hover {
 }
 
 /** VIEW LIST **/
+#block-views-block-par-realisateur-block-1 ul,
 #block-quelquesinfos-2 ul,
 #block-films-testgender ul,
 #block-views-block-latest-additions-block-1 ul,
@@ -284,6 +285,7 @@ img.film-node {
   float:left;
 }
 
+#block-views-block-par-realisateur-block-1 ul.js-pager__items li,
 #block-views-block-duplicate-of-relative-content-for-films-block-1 ul.js-pager__items li{
   float:left;
 }
