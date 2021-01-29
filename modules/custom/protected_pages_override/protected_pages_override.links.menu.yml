@@ -1,0 +1,5 @@
+protected_pages_override.config_form:
+  route_name: protected_pages_override.config_form
+  title: 'Protected pages override'
+  description: 'Protected pages override'
+  parent: system.admin_config_services
