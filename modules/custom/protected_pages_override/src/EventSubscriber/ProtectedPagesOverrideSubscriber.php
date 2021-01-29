@@ -3,11 +3,64 @@
 namespace Drupal\protected_pages_override\EventSubscriber;
 
 use Drupal\protected_pages\EventSubscriber\ProtectedPagesSubscriber;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Drupal\user\Entity\User;
 
 /**
  * Redirects user to protected page login screen.
  */
 class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
+
+  /**
+   * Caching protected pages
+   *
+   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   *   The event to process.
+   * 
+   * @return void
+   */
+  public function cachingProtectedPages(FilterResponseEvent $event) {
+     
+    $config = \Drupal::config('protected_pages_override.settings');
+
+    if (!$config->get('enable')) {
+      return;
+    }
+
+    $headers          = apache_request_headers();
+    $headerUserAgent  = (isset($headers['User-Agent'])) ? $headers['User-Agent'] : null;
+
+    /** 
+     * @TODO URGENT SECURITY RISK:  add Secret-Key in headers
+     * $headerSecretKey   = (isset($headers['Secret-Key'])) ? $headers['Secret-Key'] : null;
+     * $secretKey         = $config->get('secret_key');
+     */
+    $pathSpider           = $config->get('spider_path');
+    $authorizedUserAgent  = $config->get('authorized_user_agent');
+    $uri                  = $this->requestStack->getCurrentRequest()->getUri();
+
+    if ($headerUserAgent === $authorizedUserAgent
+    // @TODO URGENT SECURITY RISK:  add Secret-Key in headers
+    // && $headerSecretKey === $secretKey 
+    && strrpos($uri, $pathSpider) !== false
+    ) {
+      $user = User::load($this->currentUser->id());
+      $user->addRole($config->get('spider_role_name'));
+      $user->save();
+      $this->currentUser->setAccount($user);
+      \Drupal::logger('protected_pages_override')->notice("PROTECTED PAGES CACHED: " . $uri);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents() {
+    $events[KernelEvents::RESPONSE][] = ['cachingProtectedPages'];
+    $events[KernelEvents::RESPONSE][] = ['checkProtectedPage'];
+    return $events;
+  }
 
   /**
    * Returns protected page id.
@@ -21,6 +74,7 @@ class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
    *   The protected page id.
    */
   public function protectedPagesIsPageLocked(string $current_path, string $normal_path) {
+    
     $fields = ['pid'];
     $conditions = [];
     $conditions['or'][] = [
@@ -35,9 +89,6 @@ class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
     ];
     $pid = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
 
-    /**
-     * RACOL MODIFICATION START
-     */
     if ($pid === false) {
       return;
     }
@@ -47,9 +98,6 @@ class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
     }
 
     $pid = $_SESSION['_protected_page']['global_id'];
-    /**
-     * RACOL MODIFICATION END
-     */
 
     if (isset($_SESSION['_protected_page']['passwords'][$pid]['expire_time'])) {
       if (time() >= $_SESSION['_protected_page']['passwords'][$pid]['expire_time']) {
@@ -62,5 +110,4 @@ class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
     }
     return $pid;
   }
-
 }

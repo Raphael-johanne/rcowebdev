@@ -4,3 +4,4 @@ package: Custom
 
 type: module
 core: 8.x
+configure: protected_pages_override.config_form
