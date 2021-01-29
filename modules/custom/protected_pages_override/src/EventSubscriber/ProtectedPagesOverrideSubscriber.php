@@ -45,10 +45,13 @@ class ProtectedPagesOverrideSubscriber extends ProtectedPagesSubscriber {
     // && $headerSecretKey === $secretKey 
     && strrpos($uri, $pathSpider) !== false
     ) {
-      $user = User::load($this->currentUser->id());
-      $user->addRole($config->get('spider_role_name'));
-      $user->save();
-      $this->currentUser->setAccount($user);
+      if (!$this->currentUser->hasPermission('bypass pages password protection')) {
+        $user = User::load($this->currentUser->id());
+        $user->addRole($config->get('spider_role_name'));
+        $user->save();
+        $this->currentUser->setAccount($user);
+      }
+      
       \Drupal::logger('protected_pages_override')->notice("PROTECTED PAGES CACHED: " . $uri);
     }
   }
