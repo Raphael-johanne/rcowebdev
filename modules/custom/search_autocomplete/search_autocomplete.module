@@ -1,6 +1,7 @@
 <?php
 
 function search_autocomplete_theme($existing, $type, $theme, $path) {
+  //var_dump($path);die;
   return [
     'search_autocomplete' => []
   ];

@@ -18,7 +18,6 @@
 
 #sa-results ul li {
   list-style-type:none;
-  height: 30px;
   padding: 10px;
 }
 
@@ -30,9 +29,7 @@
   color:#f4473a;
 }
 
-
 #sa-title {
-  
   outline: none;
   color: #fff;
   display: inline-block;
@@ -41,4 +38,10 @@
   border: 1px solid #ccc;
   border-radius: 15px;
   width:100%
+}
+
+.search-autocomplete-separator {
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  display: block; 
 }
