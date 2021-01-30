@@ -8,6 +8,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use \Drupal\taxonomy\Entity\Vocabulary;
+use \Drupal\node\Entity\NodeType;
 
 /**
  * Provides a autocomplete block.
@@ -22,32 +24,13 @@ class SearchAutocomplete extends BlockBase implements BlockPluginInterface, Cont
   const DEFAULT_TEMPLATE  = 'search_autocomplete';
 
   /**
-   * @var Symfony\Component\HttpFoundation\RequestStack
-   */
-  private $requestStack;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(
-    array $configuration, 
-    $plugin_id, 
-    $plugin_definition, 
-    RequestStack $request_stack
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->requestStack = $request_stack;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition,
-      $container->get('request_stack')
+      $plugin_definition
     );
   }
 
@@ -56,12 +39,14 @@ class SearchAutocomplete extends BlockBase implements BlockPluginInterface, Cont
    */
   public function build() {
     $config   = $this->getConfiguration();
-    
+
   	return [
-      '#theme'            => self::DEFAULT_TEMPLATE,
-      '#cache'            => ['max-age' => 0],
-      '#error_message'    => $config['bug_report_error_message'],
-      '#success_message'  => $config['bug_report_success_message'],
+      '#theme'                => self::DEFAULT_TEMPLATE,
+      '#cache'                => ['max-age' => 0],
+      '#node_enable'          => $config['node_enable'],
+      '#node_type'            => $config['node_type'],
+      '#taxonomy_enable'      => $config['taxonomy_enable'],
+      '#taxonomy_vocabulary'  => $config['taxonomy_vocabulary'],
     ];
   }
 
@@ -69,19 +54,55 @@ class SearchAutocomplete extends BlockBase implements BlockPluginInterface, Cont
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $form     = parent::blockForm($form, $form_state);
-    $config   = $this->getConfiguration();
+    $form         = parent::blockForm($form, $form_state);
+    $config       = $this->getConfiguration();
+    $vocabularies = Vocabulary::loadMultiple();
+    $types        = NodeType::loadMultiple();
 
-    $form['bug_report_error_message'] = [
-      '#type'           => 'textarea',
-      '#title'          => $this->t('Error message'),
-      '#default_value'  => isset($config['bug_report_error_message']) ? $config['bug_report_error_message'] : '',
+    $form['fieldset_node'] = [
+      '#type'           => 'fieldset',
+      '#title'          => $this->t('Node')
+    ];
+    
+    $form['fieldset_node']['node_enable'] = [
+      '#type'           => 'checkbox',
+      '#title'          => $this->t('Search on node title enable'),
+      '#default_value'  => isset($config['node_enable']) ? $config['node_enable'] : '',
     ];
 
-    $form['bug_report_success_message'] = [
-      '#type'           => 'textarea',
-      '#title'          => $this->t('Success message'),
-      '#default_value'  => isset($config['bug_report_success_message']) ? $config['bug_report_success_message'] : '',
+    $options = [];  
+    foreach ($types as $type) {
+      $options[$type->id()] =  $type->get('name');
+    }
+
+    $form['fieldset_node']['node_type'] = [
+      '#type'           => 'select',
+      '#title'          => $this->t('Type'),
+      '#options'        => $options,
+      '#default_value'  => isset($config['node_type']) ? $config['node_type'] : '',
+    ];
+
+    $form['fieldset_taxonomy'] = [
+      '#type'           => 'fieldset',
+      '#title'          => $this->t('Taxonomy')
+    ];
+
+    $form['fieldset_taxonomy']['taxonomy_enable'] = [
+      '#type'           => 'checkbox',
+      '#title'          => $this->t('Search on taxonomy term name enable'),
+      '#default_value'  => isset($config['taxonomy_enable']) ? $config['taxonomy_enable'] : '',
+    ];
+
+    $options = [];
+    foreach ($vocabularies as $vocabulary) {
+      $options[$vocabulary->id()] = $vocabulary->get('name');
+    }
+
+    $form['fieldset_taxonomy']['taxonomy_vocabulary'] = [
+      '#type'           => 'select',
+      '#title'          => $this->t('Vocabulary'),
+      '#options'        => $options,
+      '#default_value'  => isset($config['taxonomy_vocabulary']) ? $config['taxonomy_vocabulary'] : '',
     ];
 
     return $form;
@@ -93,7 +114,9 @@ class SearchAutocomplete extends BlockBase implements BlockPluginInterface, Cont
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
     $values = $form_state->getValues();
-    $this->configuration['bug_report_error_message']    = $values['bug_report_error_message'];
-    $this->configuration['bug_report_success_message']  = $values['bug_report_success_message'];
+    $this->configuration['node_enable']         = $values["fieldset_node"]['node_enable'];
+    $this->configuration['node_type']           = $values["fieldset_node"]['node_type'];
+    $this->configuration['taxonomy_enable']     = $values['fieldset_taxonomy']['taxonomy_enable'];
+    $this->configuration['taxonomy_vocabulary'] = $values['fieldset_taxonomy']['taxonomy_vocabulary'];
   }
 }

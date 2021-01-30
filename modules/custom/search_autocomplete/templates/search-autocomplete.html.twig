@@ -1,7 +1,7 @@
 {{ attach_library('search_autocomplete/search-autocomplete') }}
 <div id="sa-container">
     <form>
-        <input data="{{ path('search_autocomplete.save', {}) }}" type="text" id="sa-title" placeholder="Titre du film" autocomplete="off"/>
+        <input data="{{ path('search_autocomplete.save', {}) }}" type="text" id="sa-title" placeholder="{{ 'Enter the title of a film or the name of a director ...'|t }}" autocomplete="off"/>
     </form>
     <div id="sa-results"></div>
 </div>
