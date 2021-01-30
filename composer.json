@@ -37,7 +37,10 @@
         "drupal/sitemap": "^1.5",
         "drupal/superfish": "^1.4",
         "drupal/token": "^1.9",
-        "drush/drush": "^10.3"
+        "drush/drush": "^10.3",
+        "drupal/mailsystem": "^4.3",
+        "drupal/phpmailer_smtp": "^2.0",
+        "drupal/smtp": "^1.0"
     },
     "conflict": {
         "drupal/drupal": "*"
