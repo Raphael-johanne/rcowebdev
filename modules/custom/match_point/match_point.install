@@ -44,6 +44,36 @@ function match_point_schema() {
     'primary key' => ['id']
   ];
 
+  $schema['match_point_level'] = [
+    'description' => 'Mactch points level',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Level ID',
+      ],
+      'from' => [
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'to' => [
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'points' => [
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
   return $schema;
 }
 
@@ -53,4 +83,5 @@ function match_point_schema() {
 function match_point_uninstall() {
   $db = Database::getConnection()->schema();
   $db->dropTable('match_point_user');
+  $db->dropTable('match_point_level');
 }

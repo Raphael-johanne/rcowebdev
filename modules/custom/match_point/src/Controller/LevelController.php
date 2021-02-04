@@ -8,9 +8,9 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * User controller.
+ * Level controller.
  */
-class UserController extends ControllerBase {
+class LevelController extends ControllerBase {
 
   /**
    * The database connection.
@@ -47,17 +47,22 @@ class UserController extends ControllerBase {
     $header = [
       [
         'data'  => $this->t('ID'),
-        'field' => 'mpu.id',
+        'field' => 'mpl.id',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
-        'data'  => $this->t('Name'),
-        'field' => 'mpu.name',
+        'data'  => $this->t('From'),
+        'field' => 'mpl.name',
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ],
+      [
+        'data'  => $this->t('To'),
+        'field' => 'mpl.points',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
         'data'  => $this->t('Points'),
-        'field' => 'mpu.points',
+        'field' => 'mpl.points',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
@@ -66,38 +71,40 @@ class UserController extends ControllerBase {
       ],
     ];
 
-    $query = $this->connection->select('match_point_user', 'mpu')
+    $query = $this->connection->select('match_point_level', 'mpl')
       ->extend('\Drupal\Core\Database\Query\PagerSelectExtender')
       ->extend('\Drupal\Core\Database\Query\TableSortExtender');
-    $query->fields('mpu', [
+    $query->fields('mpl', [
       'id',
-      'name',
+      'from',
+      'to',
       'points'
     ]);
     
-    $users = $query
+    $levels = $query
       ->limit(50)
       ->orderByHeader($header)
       ->execute();
 
-    foreach ($users as $user) {
+    foreach ($levels as $level) {
 
       $links = [];
       
       $row = [
-        $user->id,
-        $user->name,
-        $user->points,
+        $level->id,
+        $level->from,
+        $level->to,
+        $level->points,
       ];
 
       $links['edit'] = [
         'title' => $this->t('Edit'),
-        'url'   => Url::fromRoute('match_point.user.edit', ['id' => $user->id]),
+        'url'   => Url::fromRoute('match_point.level.edit', ['id' => $level->id]),
       ];
 
       $links['delete'] = [
         'title' => $this->t('Delete'),
-        'url'   => Url::fromRoute('match_point.user.delete', ['id' => $user->id]),
+        'url'   => Url::fromRoute('match_point.level.delete', ['id' => $level->id]),
       ];
 
       $row[] = [
@@ -110,14 +117,14 @@ class UserController extends ControllerBase {
       $rows[] = $row; 
     }
 
-    $build['match_point_user_table'] = [
+    $build['match_point_level_table'] = [
       '#type' 	=> 'table',
       '#header' => $header,
       '#rows' 	=> $rows,
-      '#empty' 	=> $this->t('No user available.'),
+      '#empty' 	=> $this->t('No level available.'),
     ];
     
-    $build['match_point_user_pager'] = ['#type' => 'pager'];
+    $build['match_point_level_pager'] = ['#type' => 'pager'];
 
     return $build;
   }

@@ -8,18 +8,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\match_point\MatchPointManager;
 
 /**
- * Configure answer edit form
+ * Configure user edit form
  */
 class EditForm extends FormBase {
 
     /**
-     * The database connection.
+     * matchPointManager
      *
-     * @var \Drupal\Core\Database\Connection
+     * @var \Drupal\match_point\MatchPointManager
      */
-    protected $connection;
+    protected $matchPointManager;
+
+	/**
+	 * The database connection.
+	 *
+	 * @var \Drupal\Core\Database\Connection
+	 */
+	protected $connection;
 
     /**
      * User id
@@ -31,10 +39,12 @@ class EditForm extends FormBase {
     /**
      * Constructs
      *
-     * @param \Drupal\Core\Database\Connection $connection The database connection
+     * @param \Drupal\match_point\MatchPointManager $matchPointManager
+     * @param \Drupal\Core\Database\Connection      $connection
      */
-    public function __construct(Connection $connection) {
-        $this->connection = $connection;
+    public function __construct(MatchPointManager $matchPointManager, Connection $connection) {
+        $this->matchPointManager    = $matchPointManager;
+        $this->connection           = $connection;
     }
 
     /**
@@ -51,6 +61,7 @@ class EditForm extends FormBase {
      */
     public static function create(ContainerInterface $container) {
         return new static(
+            $container->get('match_point.manager'),
             $container->get('database')
         );
     }
@@ -63,6 +74,8 @@ class EditForm extends FormBase {
     }
 
     /**
+     * build form
+     * 
      * @param array              $form
      * @param FormStateInterface $form_state
      * @param int|null           $answerId
@@ -71,8 +84,8 @@ class EditForm extends FormBase {
      */
     public function buildForm(array $form, FormStateInterface $form_state, $id = null) {
         $this->userId     = $id;
-        $editedUser       = $this->getUser();
-        
+        $editedUser       = $this->matchPointManager->getUserById($this->userId);
+
         if ($id > 0 && !$editedUser) {
             throw new \Exception($this->t('Match point user - The user provided does not exist'));
         }
@@ -101,6 +114,12 @@ class EditForm extends FormBase {
             '#required'         => true
         ];
 
+        $form['match_point_level_enable'] = [
+            '#type'             => 'checkbox',
+            '#title'            => $this->t('Use automatic point calculation by level'),
+            '#default_value'    => true,
+        ];
+
         $form['submit'] = [
             '#type'             => 'submit',
             '#title'            => $this->t('Save'),
@@ -115,13 +134,20 @@ class EditForm extends FormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) 
     {
-        $toSave     = [
-            'name'      => $form_state->getValue('match_point_name'),
-            'points'    => $form_state->getValue('match_point_points')
-        ];
-
+        $toSave     = ['name' => $form_state->getValue('match_point_name')];
         $picture    = $form_state->getValue('match_point_picture', 0);
-      
+        $points     = $form_state->getValue('match_point_points');
+
+        if ($form_state->getValue('match_point_level_enable'))  {
+            $earnPoints = $this->matchPointManager->getEarnPointsByPoints($points);
+            if (is_null($earnPoints)) {
+                throw new \exception('getEarnPointsByPoints return a bad response');
+            }
+            $toSave['points'] = $points + $earnPoints;
+        } else {
+            $toSave['points'] = $points;
+        }
+
         if (isset($picture[0]) && !empty($picture[0])) {
           $file = File::load($picture[0]);
           $file->setPermanent();
@@ -146,26 +172,5 @@ class EditForm extends FormBase {
 
         $response = Url::fromRoute('match_point.overview');
         $form_state->setRedirectUrl($response);
-    }
-
-    /**
-     *
-     * @return mixed
-     */
-    private function getUser() {
-        if (is_null($this->userId))
-            return null;
-
-        return $this->connection->select('match_point_user')
-            ->fields('match_point_user', 
-                [
-                    'name',
-                    'picture',
-                    'points'
-                ]
-            )
-            ->condition('id', $this->userId, "=")
-            ->execute()
-            ->fetchAll()[0];
     }
 }
