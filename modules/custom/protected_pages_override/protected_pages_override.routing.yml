@@ -1,0 +1,7 @@
+protected_pages_override.config_form:
+  path: 'admin/config/services/protected_pages_override'
+  defaults:
+    _form: '\Drupal\protected_pages_override\Form\ProtectedPagesOverrideConfigForm'
+    _title: 'Protected pages override'
+  requirements:
+    _permission: 'administer protected pages override'
