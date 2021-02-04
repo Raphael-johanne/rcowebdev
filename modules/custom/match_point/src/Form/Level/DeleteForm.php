@@ -62,7 +62,7 @@ class DeleteForm extends ConfirmFormBase {
 	 * {@inheritdoc}
 	 */
 	public function getCancelUrl() {
-		return new Url('match_point.level.overview');
+		return new Url('match_point.level');
 	}
 
 	/**
@@ -84,7 +84,7 @@ class DeleteForm extends ConfirmFormBase {
 
 		$this->messenger()->addMessage($this->t('The level has been deleted'));
 		
-		$response = Url::fromRoute('match_point.level.overview');
+		$response = Url::fromRoute('match_point.level');
 		$form_state->setRedirectUrl($response); 
 	}
 }

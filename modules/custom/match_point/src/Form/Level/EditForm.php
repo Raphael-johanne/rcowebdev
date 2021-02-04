@@ -51,7 +51,7 @@ class EditForm extends FormBase {
      * {@inheritdoc}
      */
     public function getCancelUrl() {
-        return new Url('match_point.level.overview');
+        return new Url('match_point.level');
     }
 
     /**
@@ -78,7 +78,7 @@ class EditForm extends FormBase {
      * 
      * @param array              $form
      * @param FormStateInterface $form_state
-     * @param int|null           $answerId
+     * @param int|null           $id
      *
      * @return array
      */
@@ -86,25 +86,25 @@ class EditForm extends FormBase {
         $this->id     = $id;
         $edited       = $this->matchPointManager->getLevelById($this->id);
 
-        if ($id > 0 && !$editeditededUser) {
-            throw new \Exception($this->t('Match point user - The user provided does not exist'));
+        if ($id > 0 && !$edited) {
+            throw new \Exception($this->t('Match point level - The level provided does not exist'));
         }
       
-        $form['match_point_points'] = [
+        $form['match_point_from'] = [
             '#type'             => 'textfield',
             '#title'            => $this->t('From'),
             '#default_value'    => $edited->from,
             '#required'         => true
         ];
 
-        $form['match_point_points'] = [
+        $form['match_point_to'] = [
             '#type'             => 'textfield',
             '#title'            => $this->t('To'),
             '#default_value'    => $edited->to,
             '#required'         => true
         ];
 
-        $form['match_point_points'] = [
+        $form['match_point_earn'] = [
             '#type'             => 'textfield',
             '#title'            => $this->t('Earn Points'),
             '#default_value'    => $edited->points,
@@ -126,16 +126,15 @@ class EditForm extends FormBase {
     public function submitForm(array &$form, FormStateInterface $form_state) 
     {
         $toSave     = [
-            'name'      => $form_state->getValue('match_point_name'),
-            'points'    => $this->getCalculatedPoints($form_state->getValue('match_point_points'))
-            //'points'    => $form_state->getValue('match_point_points')
+            'from'      => $form_state->getValue('match_point_from'),
+            'to'        => $form_state->getValue('match_point_to'),
+            'points'    => $form_state->getValue('match_point_earn'),
         ];
 
-
-        if ($this->userId > 0) {
+        if ($this->id > 0) {
             $this->connection->update('match_point_level')
             ->fields($toSave)
-            ->condition('id', $this->userId, "=")
+            ->condition('id', $this->id, "=")
             ->execute();
 
             $this->messenger()->addMessage($this->t('The level has been updated'));
@@ -147,49 +146,8 @@ class EditForm extends FormBase {
             $this->messenger()->addMessage($this->t('The level has been created'));
         }
 
-        $response = Url::fromRoute('match_point.level.overview');
+        $response = Url::fromRoute('match_point.level');
         $form_state->setRedirectUrl($response);
-    }
-
-    /**
-     * Get calculated points
-     * 
-     * @return int
-     */
-    private function getCalculatedPoints($p) {
-        /**
-         * formula
-         * 
-         * p    = current points of user
-         * T    = total points of all users
-         * e    = earn points of current user
-         * v    = value of a point 
-         * nb   = number of players  
-         * 
-         * p = t + ((1-(t/T))/ (nb - v))
-         */
-        $v = 1;
-        $totalPointsInformations = $this->matchPointManager->getTotalPointsInformations();
-        $T  = $totalPointsInformations->total;
-        $nb = $totalPointsInformations->nb;
-        
-
-        $e = round(
-            $p + ((1 - ($p/$T)) / ($nb - $v))
-        );
-        echo '<pre>';
-        var_dump('e = $p + ((1 - ($p/$T)) / ($nb - $v))');
-        if ($e == $p) {
-            $k = $e == $p;
-            var_dump("e == p ? " . $k);
-            $e += 1;
-        }
-        
-        var_dump("Total points = " . $T);
-        var_dump("Old point = " . $p);
-        var_dump("New point = " . $e);
-        die('KO');  
-        return $e;
     }
 
 }

@@ -83,27 +83,28 @@ class MatchPointManager implements MatchPointManagerInterface {
                 'points'
             ]
         )
-        ->condition('id', $useidrId, "=")
+        ->condition('id', $id, "=")
         ->execute()
         ->fetchAll()[0];
   }
 
   /**
-   * get level by id
+   * get earn points 
    * 
-   * @return mixed
+   * @return int
    */
-  public function getEarnPointsByLevel($points) {
-    return $this->connection->select('match_point_level')
-        ->fields('match_point_level', 
+  public function getEarnPointsByPoints($points = 0) {
+    return $this->connection->select('match_point_level', 'mpl')
+        ->fields('mpl', 
             [
                 'points'
             ]
         )
-        ->condition('id', $useidrId, "=")
+        ->condition('mpl.from',(int) $points, "<")
+        ->condition('mpl.to', (int) $points, ">=")
         ->execute()
-        ->fetchAll()[0];
+        ->fetchAll()[0]
+        ->points;
   }
-  
 
 }

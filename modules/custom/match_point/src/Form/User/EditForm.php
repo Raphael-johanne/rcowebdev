@@ -116,7 +116,7 @@ class EditForm extends FormBase {
 
         $form['match_point_level_enable'] = [
             '#type'             => 'checkbox',
-            '#title'            => $this->t('Use level calculation'),
+            '#title'            => $this->t('Use automatic point calculation by level'),
             '#default_value'    => true,
         ];
 
@@ -134,16 +134,20 @@ class EditForm extends FormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) 
     {
-        $toSave = ['name' => $form_state->getValue('match_point_name')];
+        $toSave     = ['name' => $form_state->getValue('match_point_name')];
+        $picture    = $form_state->getValue('match_point_picture', 0);
+        $points     = $form_state->getValue('match_point_points');
 
         if ($form_state->getValue('match_point_level_enable'))  {
-            $toSave['points'] += $this->matchPointManager->getEarnPointsByLevel($form_state->getValue('match_point_points'));
+            $earnPoints = $this->matchPointManager->getEarnPointsByPoints($points);
+            if (is_null($earnPoints)) {
+                throw new \exception('getEarnPointsByPoints return a bad response');
+            }
+            $toSave['points'] = $points + $earnPoints;
         } else {
-            $toSave['points'] = $form_state->getValue('match_point_points');
+            $toSave['points'] = $points;
         }
 
-        $picture    = $form_state->getValue('match_point_picture', 0);
-      
         if (isset($picture[0]) && !empty($picture[0])) {
           $file = File::load($picture[0]);
           $file->setPermanent();

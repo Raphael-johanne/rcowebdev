@@ -7,4 +7,4 @@ match_point.level.edit:
   route_name: match_point.level.edit
   title: 'Add level'
   appears_on:
-    - match_point.level.overview
+    - match_point.level

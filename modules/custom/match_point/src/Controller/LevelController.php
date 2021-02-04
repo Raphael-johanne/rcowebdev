@@ -47,22 +47,22 @@ class LevelController extends ControllerBase {
     $header = [
       [
         'data'  => $this->t('ID'),
-        'field' => 'mpu.id',
+        'field' => 'mpl.id',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
         'data'  => $this->t('From'),
-        'field' => 'mpu.name',
+        'field' => 'mpl.name',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
         'data'  => $this->t('To'),
-        'field' => 'mpu.points',
+        'field' => 'mpl.points',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
         'data'  => $this->t('Points'),
-        'field' => 'mpu.points',
+        'field' => 'mpl.points',
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       [
@@ -71,21 +71,22 @@ class LevelController extends ControllerBase {
       ],
     ];
 
-    $query = $this->connection->select('match_point_user', 'mpu')
+    $query = $this->connection->select('match_point_level', 'mpl')
       ->extend('\Drupal\Core\Database\Query\PagerSelectExtender')
       ->extend('\Drupal\Core\Database\Query\TableSortExtender');
-    $query->fields('mpu', [
+    $query->fields('mpl', [
       'id',
-      'name',
+      'from',
+      'to',
       'points'
     ]);
     
-    $users = $query
+    $levels = $query
       ->limit(50)
       ->orderByHeader($header)
       ->execute();
 
-    foreach ($users as $user) {
+    foreach ($levels as $level) {
 
       $links = [];
       

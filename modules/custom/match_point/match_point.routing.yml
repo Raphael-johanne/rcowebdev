@@ -20,7 +20,7 @@ match_point.user.delete:
     _title: 'Match point User delete'
   requirements:
     _permission: 'administer match_point' 
-match_point.level.overview:
+match_point.level:
   path: '/admin/match_point/levels'
   defaults:
     _controller: '\Drupal\match_point\Controller\LevelController::overview'
@@ -31,7 +31,7 @@ match_point.level.edit:
   path: '/admin/match_point/level/edit/{id}'
   defaults:
     _form: '\Drupal\match_point\Form\Level\EditForm'
-    _title: 'Match point User edit'
+    _title: 'Match point level edit'
     id: null
   requirements:
     _permission: 'administer match_point'
@@ -39,6 +39,6 @@ match_point.level.delete:
   path: '/admin/match_point/level/delete/{id}'
   defaults:
     _form: '\Drupal\match_point\Form\Level\DeleteForm'
-    _title: 'Match point User delete'
+    _title: 'Match point level delete'
   requirements:
     _permission: 'administer match_point' 
