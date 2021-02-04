@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Answer controller.
+ * User controller.
  */
 class UserController extends ControllerBase {
 

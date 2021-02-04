@@ -40,7 +40,8 @@
         "drush/drush": "^10.3",
         "drupal/mailsystem": "^4.3",
         "drupal/phpmailer_smtp": "^2.0",
-        "drupal/smtp": "^1.0"
+        "drupal/smtp": "^1.0",
+        "drupal/adsense":"^1.2"
     },
     "conflict": {
         "drupal/drupal": "*"

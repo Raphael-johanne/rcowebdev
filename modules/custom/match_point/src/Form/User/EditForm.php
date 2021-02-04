@@ -114,6 +114,12 @@ class EditForm extends FormBase {
             '#required'         => true
         ];
 
+        $form['match_point_level_enable'] = [
+            '#type'             => 'checkbox',
+            '#title'            => $this->t('Use level calculation'),
+            '#default_value'    => true,
+        ];
+
         $form['submit'] = [
             '#type'             => 'submit',
             '#title'            => $this->t('Save'),
@@ -128,11 +134,13 @@ class EditForm extends FormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) 
     {
-        $toSave     = [
-            'name'      => $form_state->getValue('match_point_name'),
-            'points'    => $this->getCalculatedPoints($form_state->getValue('match_point_points'))
-            //'points'    => $form_state->getValue('match_point_points')
-        ];
+        $toSave = ['name' => $form_state->getValue('match_point_name')];
+
+        if ($form_state->getValue('match_point_level_enable'))  {
+            $toSave['points'] += $this->matchPointManager->getEarnPointsByLevel($form_state->getValue('match_point_points'));
+        } else {
+            $toSave['points'] = $form_state->getValue('match_point_points');
+        }
 
         $picture    = $form_state->getValue('match_point_picture', 0);
       
@@ -161,46 +169,4 @@ class EditForm extends FormBase {
         $response = Url::fromRoute('match_point.overview');
         $form_state->setRedirectUrl($response);
     }
-
-    /**
-     * Get calculated points
-     * 
-     * @return int
-     */
-    private function getCalculatedPoints($p) {
-        /**
-         * formula
-         * 
-         * p    = current points of user
-         * T    = total points of all users
-         * e    = earn points of current user
-         * v    = value of a point 
-         * nb   = number of players  
-         * 
-         * p = t + ((1-(t/T))/ (nb - v))
-         */
-        $v = 1;
-        $totalPointsInformations = $this->matchPointManager->getTotalPointsInformations();
-        $T  = $totalPointsInformations->total;
-        $nb = $totalPointsInformations->nb;
-        
-
-        $e = round(
-            $p + ((1 - ($p/$T)) / ($nb - $v))
-        );
-        echo '<pre>';
-        var_dump('e = $p + ((1 - ($p/$T)) / ($nb - $v))');
-        if ($e == $p) {
-            $k = $e == $p;
-            var_dump("e == p ? " . $k);
-            $e += 1;
-        }
-        
-        var_dump("Total points = " . $T);
-        var_dump("Old point = " . $p);
-        var_dump("New point = " . $e);
-        die('KO');  
-        return $e;
-    }
-
 }

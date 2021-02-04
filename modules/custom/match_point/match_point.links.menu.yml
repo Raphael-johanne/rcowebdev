@@ -4,3 +4,10 @@ match_point.overview:
   route_name: match_point.overview
   parent: system.admin_content
   weight: -1
+
+  match_point.level.overview:
+  title: 'Match point'
+  description: 'Administer Match points'
+  route_name: match_point.level
+  parent: match_point.overview
+  weight: -1
