@@ -1,13 +1,16 @@
-<ul id="match-point-user">
+{{ attach_library('match_point/match-point') }}
+<ul class="match-point-user">
     {% for user in users %}
-        <li class="match-point-user">
-            <img height="80px" width="80px" src="{{ file_url('public://downloads') }}/{{ user.picture }}" /> 
-            <span class="match-point-user-row">
-                {{ user.name }}
-            </span> 
-            <span class="match-point-user-row-point">
-                {{ user.points }}
-            </span> 
-        </li>
+        {% if user.points > 0 %}
+            <li class="match-point-user">
+                <img height="80px" width="80px" src="{{ file_url('public://downloads') }}/{{ user.picture }}" /> 
+                <span class="match-point-user-row">
+                    {{ user.name }}
+                </span> 
+                <span class="match-point-user-row-point">
+                    {{ user.points }}
+                </span> 
+            </li>
+        {% endif %}
     {% endfor %}
 </ul>

@@ -28,11 +28,15 @@ class MatchPointManager implements MatchPointManagerInterface {
    * 
    * @return array
    */
-  public function getUsers() {
+  public function getUsers($range = 0) {
     $query = $this->connection->select('match_point_user', 'mpu');
     $query->fields('mpu', ['id', 'name', 'picture', 'points']);
     $query->orderBy('points', 'DESC');
-    $query->range(0, 3);
+
+    if ($range > 0) {
+      $query->range(0, $range);
+    }
+    
     return $query->execute()
       ->fetchAll();
   }
@@ -107,4 +111,52 @@ class MatchPointManager implements MatchPointManagerInterface {
         ->points;
   }
 
+  /**
+   * get winner by id
+   * 
+   * @return mixed
+   */
+  public function getWinnerById($id) {
+    $query = $this->connection->select('match_point_winner', 'mpw');
+    $query->fields('mpw', 
+      [
+          'user_id',
+          'points',
+          'description',
+          'from',
+          'to',
+          'available'
+      ]
+    );
+    $query->fields('mpu', ['name']);
+    $query->innerJoin('match_point_user', 'mpu', 'mpw.user_id = mpu.id');
+    $query->condition('mpw.id', $id, "=");
+
+    return $query->execute()
+        ->fetchAll()[0];
+  }
+
+  /**
+   * get winner
+   * 
+   * @return mixed
+   */
+  public function getWinner() {
+    $query = $this->connection->select('match_point_winner', 'mpw');
+    $query->fields('mpw', 
+      [
+          'user_id',
+          'points',
+          'description',
+          'from',
+          'to'
+      ]
+    );
+    $query->fields('mpu', ['name', 'picture']);
+    $query->innerJoin('match_point_user', 'mpu', 'mpw.user_id = mpu.id');
+    $query->condition('mpw.available', 1, "=");
+
+    return $query->execute()
+        ->fetchAll()[0];
+  }
 }

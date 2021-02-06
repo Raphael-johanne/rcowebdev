@@ -206,41 +206,6 @@ img.film-node {
   width: 100%;
 }
 
-/** MATCH POINT **/
-#match-point-user {
-  text-align: center;
-  list-style: none;
-  padding:0;
-  margin:0;
-}
-
-#match-point-user li{
-  display:block;
-  position:relative;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #DDDDDD;
-  margin-bottom: 15px;
-}
-
-.match-point-user img{
-  border-radius: 50%;
-  display: inline;
-}
-
-.match-point-user-row{
-  display:block;
-}
-
-.match-point-user-row-point {
-  font-size: 25px;
-  font-weight: bold;
-  color:#f4473a;
-}
-
-#block-matchpointblock {
-  text-align: center;
-}
-
 .quizz-answer {
   color:#f4473a;
 }
@@ -319,6 +284,7 @@ img.film-node {
 
 #block-films-content .press img{
   height: 150px;
+  width:100%;
 }
 
 .press li {

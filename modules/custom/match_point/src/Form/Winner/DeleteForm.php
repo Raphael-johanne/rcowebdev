@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\match_point\Form\User;
+namespace Drupal\match_point\Form\Winner;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -18,11 +18,11 @@ class DeleteForm extends ConfirmFormBase {
 	protected $connection;
 
 	/**
-	 * User to delete
+	 * Winner to delete
 	 *
 	 * @var int
 	 */
-	protected $userId = null;
+	protected $id = null;
 
 	/**
 	 * Constructs
@@ -48,28 +48,28 @@ class DeleteForm extends ConfirmFormBase {
 	 * {@inheritdoc}
 	 */
 	public function getFormId() {
-	    return 'match_point_admin_user';
+	    return 'match_point_admin_winner';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getQuestion() {
-		return $this->t('Do you really want to remove this user ?');
+		return $this->t('Do you really want to remove this winner ?');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getCancelUrl() {
-		return new Url('match_point.overview');
+		return new Url('match_point.winner');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function buildForm(array $form, FormStateInterface $form_state, $id = null) {
-		$this->userId = $id;
+		$this->id = $id;
 		return parent::buildForm($form, $form_state);
 	}
 
@@ -78,13 +78,13 @@ class DeleteForm extends ConfirmFormBase {
 	 */
 	public function submitForm(array &$form, FormStateInterface $form_state) {
 
-		$this->connection->delete('match_point_user')
-		->condition('id', $this->userId)
-		->execute();
+		$this->connection->delete('match_point_winner')
+			->condition('id', $this->id)
+			->execute();
+
+		$this->messenger()->addMessage($this->t('The winner has been deleted'));
 		
-		$this->messenger()->addMessage($this->t('The user has been deleted'));
-		
-		$response = Url::fromRoute('match_point.overview');
+		$response = Url::fromRoute('match_point.winner');
 		$form_state->setRedirectUrl($response); 
 	}
 }

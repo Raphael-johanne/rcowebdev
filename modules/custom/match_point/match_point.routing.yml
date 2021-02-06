@@ -42,3 +42,25 @@ match_point.level.delete:
     _title: 'Match point level delete'
   requirements:
     _permission: 'administer match_point' 
+match_point.winner:
+  path: '/admin/match_point/winners'
+  defaults:
+    _controller: '\Drupal\match_point\Controller\WinnerController::overview'
+    _title: 'Winners'
+  requirements:
+    _permission: 'administer match_point'
+match_point.winner.edit:
+  path: '/admin/match_point/winner/edit/{id}'
+  defaults:
+    _form: '\Drupal\match_point\Form\Winner\EditForm'
+    _title: 'Match point Winner edit'
+    id: null
+  requirements:
+    _permission: 'administer match_point'
+match_point.winner.delete:
+  path: '/admin/match_point/winner/delete/{id}'
+  defaults:
+    _form: '\Drupal\match_point\Form\Winner\DeleteForm'
+    _title: 'Match point Winner delete'
+  requirements:
+    _permission: 'administer match_point' 

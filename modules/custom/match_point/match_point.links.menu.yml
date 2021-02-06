@@ -11,3 +11,10 @@ match_point.level:
   route_name: match_point.level
   parent: match_point.overview
   weight: -1
+
+match_point.winner:
+  title: 'Winner'
+  description: 'Administer Winners'
+  route_name: match_point.winner
+  parent: match_point.overview
+  weight: -1
