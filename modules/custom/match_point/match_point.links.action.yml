@@ -8,3 +8,8 @@ match_point.level.edit:
   title: 'Add level'
   appears_on:
     - match_point.level
+match_point.winner.edit:
+  route_name: match_point.winner.edit
+  title: 'Add Winner'
+  appears_on:
+    - match_point.winner

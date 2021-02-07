@@ -8,21 +8,18 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Provides a Match point Block.
+ * Provides a Match point Winner Block.
  *
  * @Block(
- *   id = "match_point_block",
- *   admin_label = @Translation("Match point block")
+ *   id = "match_point_winner_block",
+ *   admin_label = @Translation("Match point winner block")
  * )
  */
-class MatchPoint extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
+class Winner extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
 
-  const DEFAULT_TEMPLATE   = 'match_point_result_template';
-
-  const NBR_USER_TO_SHOW   = 3;
+  const DEFAULT_TEMPLATE   = 'match_point_winner_template';
 
   /**
    * @var Drupal\match_point\MatchPointManagerInterface
@@ -58,12 +55,11 @@ class MatchPoint extends BlockBase implements BlockPluginInterface, ContainerFac
    * {@inheritdoc}
    */
   public function build() {
-    $theme      = self::DEFAULT_TEMPLATE;
-  
-  	return [
-      '#theme'  => $theme,
-      '#users'  => $this->matchPointManager->getUsers(self::NBR_USER_TO_SHOW),
-      '#cache'  => ['max-age' => 0]
-    ];
+    if ($winner = $this->matchPointManager->getWinner()) {
+      return [
+        '#theme'  => self::DEFAULT_TEMPLATE,
+        '#user'   => $winner
+      ];
+    }
   }
 }

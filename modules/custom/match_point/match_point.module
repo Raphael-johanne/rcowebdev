@@ -7,5 +7,10 @@ function match_point_theme($existing, $type, $theme, $path) {
       	'users' => []
       ],
     ],
+    'match_point_winner_template' => [
+      'variables' => [
+      	'user' => []
+      ],
+    ],
   ];
 }

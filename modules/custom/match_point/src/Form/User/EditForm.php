@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\match_point\MatchPointManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Configure user edit form

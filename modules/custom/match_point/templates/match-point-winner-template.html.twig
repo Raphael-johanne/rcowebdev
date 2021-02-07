@@ -1,0 +1,16 @@
+{{ attach_library('match_point/match-point') }}
+Du {{ user.from|date("d/m/Y") }} au {{ user.to|date("d/m/Y") }}
+<ul class="match-point-user">
+    <li class="match-point-user">
+        <img height="80px" width="80px" src="{{ file_url('public://downloads') }}/{{ user.picture }}" /> 
+        <span class="match-point-user-row">
+            {{ user.name }}
+        </span> 
+        <span class="match-point-user-row-point">
+            {{ user.points }}
+        </span> 
+        <span class="match-point-user-row">
+            {{ user.description }}
+        </span> 
+    </li>
+</ul>
