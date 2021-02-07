@@ -12,7 +12,7 @@ use Drupal\Core\Database\Database;
 */
 function match_point_schema() {
   $schema['match_point_user'] = [
-    'description' => 'Mactch points users',
+    'description' => 'Match points users',
     'fields' => [
       'id' => [
         'type' => 'serial',
@@ -44,8 +44,30 @@ function match_point_schema() {
     'primary key' => ['id']
   ];
 
+  $schema['match_point_user_film'] = [
+    'description' => 'Match points users films founded',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'ID',
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'node_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Node ID',
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
   $schema['match_point_level'] = [
-    'description' => 'Mactch points level',
+    'description' => 'Match points level',
     'fields' => [
       'id' => [
         'type' => 'serial',
@@ -75,7 +97,7 @@ function match_point_schema() {
   ];
 
   $schema['match_point_winner'] = [
-    'description' => 'Mactch points winner',
+    'description' => 'Match points winner',
     'fields' => [
       'id' => [
         'type' => 'serial',
