@@ -18,3 +18,4 @@ match_point.winner:
   route_name: match_point.winner
   parent: match_point.overview
   weight: -1
+  
