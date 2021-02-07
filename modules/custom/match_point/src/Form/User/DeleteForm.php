@@ -78,6 +78,10 @@ class DeleteForm extends ConfirmFormBase {
 	 */
 	public function submitForm(array &$form, FormStateInterface $form_state) {
 
+		$this->connection->delete('match_point_user_film')
+		->condition('user_id', $this->userId)
+		->execute();
+
 		$this->connection->delete('match_point_user')
 		->condition('id', $this->userId)
 		->execute();

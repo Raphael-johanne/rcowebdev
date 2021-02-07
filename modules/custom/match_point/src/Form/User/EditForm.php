@@ -84,8 +84,9 @@ class EditForm extends FormBase {
      * @return array
      */
     public function buildForm(array $form, FormStateInterface $form_state, $id = null) {
-        $this->userId     = $id;
-        $editedUser       = $this->matchPointManager->getUserById($this->userId);
+        $this->userId       = $id;
+        $editedUser         = $this->matchPointManager->getUserById($this->userId);
+        $selectedNodes      = $this->getSelectedNodes(); 
 
         if ($id > 0 && !$editedUser) {
             throw new \Exception($this->t('Match point user - The user provided does not exist'));
@@ -115,10 +116,30 @@ class EditForm extends FormBase {
             '#required'         => true
         ];
 
+        $nodes = \Drupal::entityTypeManager()
+            ->getStorage('node')
+            ->loadByProperties(['type' => 'film', 'status' => 1]);
+
+        
         $form['match_point_level_enable'] = [
             '#type'             => 'checkbox',
             '#title'            => $this->t('Use automatic point calculation by level'),
             '#default_value'    => true,
+        ];
+
+        $options = [];
+        foreach ($nodes as $node) {
+            $options[$node->id()] = $node->getTitle();
+        }
+
+        $form['match_point_node_id'] = [
+            '#type'             => 'select',
+            '#size'             => 25,
+            '#multiple'         => true,
+            '#title'            => $this->t('Select founded Films'),
+            '#options'          => $options,
+            '#default_value'    => $selectedNodes,
+            '#required'         => true
         ];
 
         $form['submit'] = [
@@ -138,7 +159,9 @@ class EditForm extends FormBase {
         $toSave     = ['name' => $form_state->getValue('match_point_name')];
         $picture    = $form_state->getValue('match_point_picture', 0);
         $points     = $form_state->getValue('match_point_points');
-
+        $nodeIds    = $form_state->getValue('match_point_node_id');
+        $id         = $this->userId;
+        
         if ($form_state->getValue('match_point_level_enable'))  {
             $earnPoints = $this->matchPointManager->getEarnPointsByPoints($points);
             if (is_null($earnPoints)) {
@@ -155,23 +178,61 @@ class EditForm extends FormBase {
           $file->save();
           $toSave['picture'] = $file->getFilename();
         }
-
-        if ($this->userId > 0) {
+        
+        if ($id > 0) {
             $this->connection->update('match_point_user')
             ->fields($toSave)
-            ->condition('id', $this->userId, "=")
+            ->condition('id', $id , "=")
+            ->execute();
+
+            $this->connection->delete('match_point_user_film')
+            ->condition('user_id', $id , '=')
             ->execute();
 
             $this->messenger()->addMessage($this->t('The user has been updated'));
         } else {
-            $this->connection->insert('match_point_user')
+            $id = $this->connection->insert('match_point_user')
             ->fields($toSave)
             ->execute();
 
             $this->messenger()->addMessage($this->t('The user has been created'));
         }
 
+        $query = $this->connection->insert('match_point_user_film')->fields(['node_id', 'user_id']);
+        foreach ($nodeIds as $nodeId) {
+            $query->values([
+                'node_id'   => $nodeId,
+                'user_id'   => $id 
+            ]);
+        }
+        
+        $query->execute();
+
         $response = Url::fromRoute('match_point.overview');
         $form_state->setRedirectUrl($response);
+    }
+
+        /**
+     * Get selected answers
+     *
+     * @return array
+     */
+    private function getSelectedNodes() {
+        if (is_null($this->userId))
+            return null;
+
+        $d = [];
+
+        $relations = $this->connection->select('match_point_user_film')
+            ->fields('match_point_user_film', ['node_id'])
+            ->condition('user_id', $this->userId, "=")
+            ->execute()
+            ->fetchAll();
+         
+        foreach ($relations as $relation) {
+            $d[] = $relation->node_id;
+        }
+
+        return $d;
     }
 }
