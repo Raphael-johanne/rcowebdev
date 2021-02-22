@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Simplenews ocerride\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Unsubscribe from this newsletter"
+msgstr "Se désinscrire de la Newsletter"
+
+msgid "Confirm remove subscription"
+msgstr "Confirmer la désinscription"
+
+msgid "This action will unsubscribe you from the newsletter mailing list."
+msgstr "Cette action va vous désinscrire de la newsletter"
+
+msgid "Are you sure you want to remove %user from the %newsletter mailing list?"
+msgstr "Etes vous sur de vouloir supprimer l'email" %user de la newsletter %newsletter ?"
+
+msgid "Unsubscribe"
+msgstr "Se désinscrire"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "This link has expired."
+msgstr "Le lien a expiré."
+
+msgid "Request new confirmation mail"
+msgstr "Demander un nouvel email de confirmation"

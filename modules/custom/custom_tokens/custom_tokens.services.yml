@@ -1,0 +1,4 @@
+services:
+  custom_tokens.film_manager:
+    class: Drupal\custom_tokens\FilmManager
+    arguments: ['@database', '@entity.manager']

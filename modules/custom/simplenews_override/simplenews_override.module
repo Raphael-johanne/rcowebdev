@@ -1,0 +1,23 @@
+<?php
+
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_node_presave().
+ */
+function simplenews_override_node_presave(NodeInterface $node) {
+  if (!$node->hasField('simplenews_issue')) {
+    return;
+  }
+
+  // Check if the newsletter is set to send on publish and needs to be send.
+  if ($node->simplenews_issue->status == SIMPLENEWS_STATUS_SEND_PUBLISH && $node->isPublished()) {
+    \Drupal::service('simplenews.spool_storage')->addFromEntity($node);
+  }
+ 
+  // Allowed to send the same newsletter multiple time
+  if ($node->simplenews_issue->status != SIMPLENEWS_STATUS_SEND_NOT) {
+    $node->simplenews_issue->status = SIMPLENEWS_STATUS_SEND_NOT;
+  }
+  
+}
