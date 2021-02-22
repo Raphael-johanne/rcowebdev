@@ -1,0 +1,6 @@
+name: Provide custom tokens
+description: Provide custom tokens
+package: Custom
+
+type: module
+core: 8.x

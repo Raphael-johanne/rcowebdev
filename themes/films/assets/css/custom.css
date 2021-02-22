@@ -300,3 +300,28 @@ img.film-node {
 @media (max-width: 500px) {
   .press li { width: 100%; } /* On small screens, show one logo per row */
 }
+
+/** SIMPLENEWS **/
+#edit-mail-0-value {
+  outline: none;
+  color: #fff;
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #2b303b;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  width: 100%;
+}
+
+#edit-mail-0-value--description{
+  display:none;
+}
+
+#edit-subscribe{
+  padding: 5px 14px;
+  background-color: #2b303b;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  outline: none;
+  background-color: #606060;
+}

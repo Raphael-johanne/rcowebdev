@@ -1,0 +1,9 @@
+name: Simplenews Override
+description: Simplenews module
+package: Custom
+
+type: module
+core: 8.x
+
+'interface translation project': simplenews_override
+'interface translation server pattern': 'modules/custom/simplenews_override/translations/fr.po'
