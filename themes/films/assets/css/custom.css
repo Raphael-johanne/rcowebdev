@@ -325,3 +325,26 @@ img.film-node {
   outline: none;
   background-color: #606060;
 }
+
+div[role="contentinfo"] {
+  border: 1px solid #ccc;
+  background-color: #2b303b;
+  color:#fff;
+  padding: 20px;
+  height: auto;
+  padding-left: 75px;
+}
+
+div[data-drupal-messages] {
+  margin-top: 20px;
+}
+
+div[data-drupal-messages]:before{
+  content: '';
+  background: url(../images/warning.png) no-repeat 0 center transparent;
+  background-size:cover;
+      position:absolute;
+  width:50px;
+  height:37px;
+  margin: 12px;
+}
