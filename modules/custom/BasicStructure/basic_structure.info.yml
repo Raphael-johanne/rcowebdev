@@ -1,6 +1,0 @@
-name: Basic Structure Module
-description: Basic structure module to begin a great adventure
-package: Custom
-
-type: module
-core: 8.x

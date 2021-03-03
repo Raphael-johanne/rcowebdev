@@ -1,7 +1,0 @@
-<?php
-
-function destroy_theme($existing, $type, $theme, $path) {
-  return [
-    'destroy_template' => []
-  ];
-}
