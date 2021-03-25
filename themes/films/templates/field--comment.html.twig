@@ -25,14 +25,19 @@
  * @see template_preprocess_field()
  * @see comment_preprocess_field()
  */
+#}
 
 <section class="comments" {{ attributes }}>
-  {% if comments and not label_hidden %}
-    {{ title_prefix }}
-    <h2{{ title_attributes }}>{{ label }}</h2>
-    {{ title_suffix }}
-  {% endif %}
-
+  <h2{{ title_attributes }}>{{ label }}</h2>
+  <p>La section commentaire peut contenir des <strong>spoilers</strong>, à celles et ceux qui n'ont pas vu le film, je vous conseille de le regarder avant puis de lire les commentaires s'il y en a et pourquoi pas en ajouter un.</p>
+  <p>Il s'agit bien entendu de discuter du film figurant sur cette page; donner son avis, partager des anecdotes, échanger, etc. le tout dans la joie et la bonne humeur</p>
+  <p>Ne sera pas toléré :
+    <ul>
+      <li>l’incitation à la haine raciale et les propos racistes, antisémites et xénophobes,</li>
+      <li>les propos à caractère homophobe ou sexiste,</li>
+      <li>la diffamation et les injures entre internautes ou à l’égard d’une tierce personne</li>
+    </ul>
+  </p>
   {% if comment_form %}
     <div id="comment-action-link">
       <a class="btn btn-default" href="#" id="add-comment" {{ content_attributes }}>{{ 'Add new comment'|t }}</a>
@@ -43,4 +48,3 @@
   {{ comments }}
 
 </section>
-#}

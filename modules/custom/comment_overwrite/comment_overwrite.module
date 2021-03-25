@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_form_alter().
+ */
+function comment_overwrite_form_alter(&$form, $form_state, $form_id) {
+
+  if (strpos($form_id, 'comment_') !== FALSE) {
+    $form['actions']['preview']['#access'] = FALSE;
+  }
+}
