@@ -99,10 +99,20 @@ div[role=error] {
 
 /** COMMENT **/
 #edit-field-comment-0-value,
-#edit-field-email-0-value {
+#edit-field-pseudo-0-value,
+.js-comment{
+  outline: none;
+  color: #fff;
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #2b303b;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  width:100%;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.js-comment {
+  margin-bottom:20px;
 }
 
 .comments{
