@@ -3,8 +3,8 @@
     {% for result in results %}
         <li>
             {{ result.name|e }}<br />
-            Réponse donnée <span class="{% if result.good_answer == false %}quizz-bad-answer{% endif %} quizz-answer">{{ result.qa_name|e }}</span><br />
-            Réponse attendue <span class="quizz-answer">{{ result.qa2_name|e }}</span>
+            {{ 'Given answer'|t }}&nbsp;<span class="{% if result.good_answer == false %}quizz-bad-answer{% endif %} quizz-answer">{{ result.qa_name|e }}</span><br />
+            {{ 'Waited answer'|t }}&nbsp;<span class="quizz-answer">{{ result.qa2_name|e }}</span>
         </li>
     {% endfor %}
 </ul>

@@ -45,7 +45,7 @@ quizz.overview:
   path: '/admin/quizz/list'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzManageController::overview'
-    _title: 'quizz'
+    _title: 'Quizz'
   requirements:
     _permission: 'administer quizz'
 quizz.edit:
@@ -60,7 +60,7 @@ quizz.question.overview:
   path: '/admin/quizz/question'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuestionController::overview'
-    _title: 'quizzs'
+    _title: 'Quizz Questions'
   requirements:
     _permission: 'administer quizz'
 quizz.question.edit:
@@ -82,7 +82,7 @@ quizz.answer.overview:
   path: '/admin/quizz_answer/list'
   defaults:
     _controller: '\Drupal\quizz\Controller\AnswerController::overview'
-    _title: 'quizz Answers'
+    _title: 'Quizz Answers'
   requirements:
     _permission: 'administer quizz'
 quizz.answer.edit:

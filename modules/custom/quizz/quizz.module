@@ -14,7 +14,9 @@ function quizz_theme($existing, $type, $theme, $path) {
     ],
     'quizz_step_template' => [
       'variables' => [
-        'quizz'  => null
+        'quizz'         => null,
+        'currentIndex'  => null,
+        'nbrQuestions'  => null
       ],
     ],
     'quizz_result_template' => [

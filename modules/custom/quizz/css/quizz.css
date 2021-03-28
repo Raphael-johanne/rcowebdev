@@ -47,3 +47,36 @@ i.fa.fa-spinner.fa-spin {
   margin-left: -12px;
   margin-right: 8px;
 }
+
+ #quizz-picture{
+   text-align:center;
+ }
+
+ #block-films-content #quizz-picture img {
+   margin-top:0;
+   max-height: 500px;
+ }
+
+ #quizz-question,
+ #quizz-progress-information {
+  margin-bottom: 20px;
+ }
+
+ #quizz-question{
+  text-align: center;
+  color:white;
+  font-size: 18px;
+ }
+
+ #quizz-progress-information progress{
+   border:none;
+   width:100%;
+   border: 1px solid #2b303b
+ }
+
+ #quizz-progress-information progress::-webkit-progress-bar {background-color: #606060; width: 100%;}
+ #quizz-progress-information progress {background-color: #606060;}
+
+ #quizz-progress-information progress::-webkit-progress-value {background-color: #f4473a !important;border-radius: 15px;}
+ #quizz-progress-information progress::-moz-progress-bar {background-color: #f4473a !important;border-radius: 15px;}
+ #quizz-progress-information progress {color: #f4473a;border-radius: 15px;}

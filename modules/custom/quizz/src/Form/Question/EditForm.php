@@ -84,30 +84,22 @@ class EditForm extends FormBase {
         if ($id > 0 && !$editedQuestion) {
             throw new \Exception($this->t('quizz Question - The question provided does not exist'));
         }
-        /*
-        $form['quizz'] = [
-            '#type'             => 'select',
-            '#multiple'         => true,
-            '#title'            => $this->t('Select quizz'),
-            '#options'          => $this->getQuizz(),
-            '#default_value'    => $selectedAnswers,
-            '#required'         => true
-        ];
-        */
-        $form['quizz_question'] = [
-            '#type'             => 'textfield',
-            '#title'            => $this->t('Question'),
-            '#default_value'    => $editedQuestion,
-            '#required'         => true
-        ];
 
+        $form['quizz_question'] = [
+            '#type'             => 'textarea',
+            '#title'            => $this->t('Question'),
+            '#default_value'    => $editedQuestion->name,
+            '#required'         => true
+        ];
+        
         $form['quizz_picture'] = [
-            '#type' => 'managed_file',
-            '#title' => $this->t('Picture'),
-            '#upload_location' => 'public://downloads',
-            '#upload_validators' => [
-              'file_validate_extensions' => ['jpg', 'png'],
+            '#type'                 => 'managed_file',
+            '#title'                => $this->t('Picture'),
+            '#upload_location'      => 'public://downloads',
+            '#upload_validators'    => [
+              'file_validate_extensions' => ['jpg png jpeg gif'],
             ],
+            '#default_value'        => [$editedQuestion->fid],
         ];
 
         $form['quizz_answers'] = [
@@ -145,8 +137,8 @@ class EditForm extends FormBase {
         $question 	    = $form_state->getValue('quizz_question');
         $answers        = $form_state->getValue('quizz_answers');
         $id             = $this->questionId;
-        $picture        = $form_state->getValue('quizz_picture', 0);
-        $goodAnswerId   = $form_state->getValue('quizz_good_answer_id', 0);
+        $picture        = $form_state->getValue('quizz_picture', []);
+        $goodAnswerId   = $form_state->getValue('quizz_good_answer_id');
         
         if (isset($picture[0]) && !empty($picture[0])) {
           $file = File::load($picture[0]);
@@ -200,12 +192,13 @@ class EditForm extends FormBase {
         if (is_null($this->questionId))
             return null;
 
-        return $this->connection->select('quizz_question')
-            ->fields('quizz_question', ['name'])
-            ->condition('id', $this->questionId, "=")
-            ->execute()
-            ->fetchAll()[0]
-            ->name;
+        $query = $this->connection->select('quizz_question');
+        $query->fields('quizz_question', ['name']);
+        $query->fields('fm', ['fid']);
+        $query->leftJoin('file_managed', 'fm', 'fm.filename = quizz_picture');
+        $query->condition('id', $this->questionId, "=");
+        return $query->execute()
+            ->fetchAll()[0];
     }
 
     /**
@@ -289,7 +282,5 @@ class EditForm extends FormBase {
             ->quizz_good_answer_id;
          
         return $item;
-    }
-
-    
+    }    
 }
