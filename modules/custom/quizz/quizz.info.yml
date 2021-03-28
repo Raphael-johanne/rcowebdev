@@ -4,3 +4,6 @@ package: Custom
 
 type: module
 core: 8.x
+
+'interface translation project': quizz
+'interface translation server pattern': 'modules/custom/quizz/translations/fr.po'

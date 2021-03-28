@@ -1,13 +1,24 @@
 {{ attach_library('quizz/quizz') }}
+<div id="quizz-progress-information">
+{{ 'Question'|t }}&nbsp;{{ currentIndex }}&nbsp;/&nbsp;{{ nbrQuestions }}
+<br />
+<progress value="{{ currentIndex }}" max="{{ nbrQuestions }}">{{ currentIndex }}</progress>
+<br />
+</div>
+
 <div id="quizz-step">
-    {{ quizz.question|e }}
+    <div id="quizz-question">
+        {{ quizz.question|e }}
+    </div>
     {% if quizz.picture %}
-        <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
+        <div id="quizz-picture">
+            <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
+        </div>
     {% endif %}
+
     <ul>
         {% for answer in quizz.answers %}
             <li>
-
                 <a class="text-entry quizz-answers" href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">
                     {{ answer.qa_name|e }}
                 </a>

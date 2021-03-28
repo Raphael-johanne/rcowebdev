@@ -67,7 +67,7 @@ class QuizzController extends ControllerBase {
     
     if (is_null($quizz)) {
       \Drupal::messenger()->addMessage('Quizz: The quizz is not available', 'error');
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());
+      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
     }
 
     return $quizz;
@@ -101,7 +101,7 @@ class QuizzController extends ControllerBase {
       || $this->quizzManager->hasQuizzed($clientIp, $pseudo, $this->currentQuizz->id)
     ) {
       \Drupal::messenger()->addMessage('Quizz: You alreadty vote for this quizz', 'error');
-      $redirectUrl = \Drupal\Core\Url::fromRoute('<front>')->toString();
+      $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.pseudo')->toString();
     } else {
       $questionId = $this->quizzManager->getQuestionsIds($this->currentQuizz->id)[0];
       $this->tempStore->set('quizz.pseudo', $currentRequest->get('quizz')['pseudo']);
@@ -122,15 +122,20 @@ class QuizzController extends ControllerBase {
     if (!empty($errors)) {
       foreach ($errors as $error) {
         \Drupal::messenger()->addMessage($error, 'error');
-        $redirectUrl = \Drupal\Core\Url::fromRoute('<front>')->toString();
+        $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.pseudo')->toString();
       }
       return new RedirectResponse($redirectUrl);
     }
-    
+
+    list($questionId, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($questionId);
+
     $build['quizz_question_pseudo'] = [
-      '#theme'    => 'quizz_step_template',
-      '#quizz' => $question,
+      '#theme'        => 'quizz_step_template',
+      '#quizz'        => $question,
+      '#currentIndex' => $currentIndex,
+      '#nbrQuestions' => $nbrQuestions,
     ];
+
     return $build;
   }
 
@@ -150,11 +155,11 @@ class QuizzController extends ControllerBase {
       foreach ($errors as $error) {
         \Drupal::messenger()->addMessage($error, 'error');
       }
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());
+      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
     }
 
     $this->quizzManager->saveResult($question_id, $answer_id, $clientIp, $pseudo, $this->currentQuizz->id);
-    $question_id    = $this->getNextId($question_id);
+    list($question_id, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($question_id);
 
     if (is_null($question_id)) {
       $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.result')->toString();
@@ -179,6 +184,7 @@ class QuizzController extends ControllerBase {
 
     $count = 0;
     $total = count($results);
+
     foreach ($results as &$result) {
       if ( (int) $result->quizz_good_answer_id === (int) $result->qa_id) {
         $count++;
@@ -223,13 +229,19 @@ class QuizzController extends ControllerBase {
   }
 
   /**
-   * getNextId
+   * getNextQuestionInformationById
    * 
    * int $questionId question id
    */
-  private function getNextId(int $questionId) {
+  private function getNextQuestionInformationById(int $questionId) {
     $questionIds  = $this->quizzManager->getQuestionsIds($this->currentQuizz->id);
+
     $currentIndex = array_search($questionId, $questionIds);
-    return (isset($questionIds[$currentIndex++])) ? $questionIds[$currentIndex++] : null;
+    $next         = $currentIndex++;
+    return [
+      (isset($questionIds[$next++])) ? $questionIds[$next++] : null,
+      $currentIndex,
+      count($questionIds)
+    ];
   }
 }
