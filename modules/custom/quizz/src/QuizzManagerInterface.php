@@ -25,10 +25,11 @@ interface QuizzManagerInterface {
    * @param varchar $clientIp
    * @param varchar $pseudo
    * @param int     $quizzId
+   * @param int     $questionId
    *
    * @return array
    */
-  public function hasquizzed($clientIp, $pseudo, $quizzId);
+  public function hasquizzed($clientIp, $pseudo, $quizzId, $questionId);
 
   /**
    * @return array

@@ -82,16 +82,18 @@ class QuizzManager implements quizzManagerInterface {
    * @param varchar $clientIp
    * @param varchar $pseudo
    * @param int     $quizzId
+   * @param int     $questionId
    *
    * @return array
    */
-  public function hasQuizzed($clientIp, $pseudo, $quizzId) {
-    $query = $this->connection->select('quizz_result', 'pr');
-    $query->condition('pr.ip', $clientIp);
-    $query->condition('pr.quizz_id', $quizzId);
-    $query->condition('pr.pseudo', $pseudo);
+  public function hasQuizzed($clientIp, $pseudo, $quizzId, $questionId) {
+    $query = $this->connection->select('quizz_result', 'qr');
+    $query->condition('qr.ip', $clientIp);
+    $query->condition('qr.quizz_id', $quizzId);
+    $query->condition('qr.pseudo', $pseudo);
+    $query->condition('qr.question_id', $questionId);
     $query->range(0, 1);
-    $query->fields('pr', ['id']);
+    $query->fields('qr', ['id']);
     return $query->execute()
       ->fetchField();
   }
@@ -213,27 +215,12 @@ class QuizzManager implements quizzManagerInterface {
   public function getQuizzById(int $id) {
 
     return $this->connection->select('quizz')
-        ->fields('quizz', ['name', 'available'])
+        ->fields('quizz', ['id', 'name', 'available'])
         ->condition('id', $id, "=")
         ->execute()
         ->fetchAll()[0];
   }
 
-  /**
-   *
-   * getAvailableQuizz
-   * 
-   * @return mixed
-   */
-  public function getAvailableQuizz() {
-
-    return $this->connection->select('quizz')
-        ->fields('quizz', ['name', 'id'])
-        ->condition('available', 1, "=")
-        ->execute()
-        ->fetchAll()[0];
-  }
-  
   /**
    * Get selected questions by quizz id
    *
