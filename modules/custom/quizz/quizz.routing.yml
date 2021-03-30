@@ -1,46 +1,47 @@
 quizz.pseudo:
-  path: '/quizz'
+  path: '/quizz/{quizzId}'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::pseudo'
     _title: "Quizz"
   requirements:
     _access: 'TRUE'
   options:
-    no_cache: 'TRUE'  
+    no_cache: 'TRUE'
 quizz.pseudo.save:
   path: '/quizz/pseudo/savePseudo'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::savePseudo'
     _title: "Quizz"
   requirements:
-    _access: 'TRUE' 
+    _access: 'TRUE'
   options:
-    no_cache: 'TRUE'  
+    no_cache: 'TRUE'
 quizz.view:
   path: '/quizz/view/{questionId}'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::view'
     _title: "Quizz"
   requirements:
-    _access: 'TRUE' 
+    _access: 'TRUE'
   options:
-    no_cache: 'TRUE'  
+    no_cache: 'TRUE'
 quizz.result:
   path: '/quizz/result'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::result'
     _title: "Quizz"
   requirements:
-    _access: 'TRUE' 
+    _access: 'TRUE'
   options:
-    no_cache: 'TRUE' 
+    no_cache: 'TRUE'
 quizz.save:
-  path: '/quizz_result/save/{question_id}/{answer_id}'
+  path: '/quizz_result/save/{questionId}/{answerId}'
   defaults:
     _controller: '\Drupal\quizz\Controller\QuizzController::save'
     _title: 'quizz result save'
   requirements:
-    _access: 'TRUE'   
+    _access: 'TRUE'
+# ADMIN
 quizz.overview:
   path: '/admin/quizz/list'
   defaults:
@@ -114,10 +115,3 @@ quizz.result.overview:
     _title: 'quizz result list'
   requirements:
     _permission: 'administer quizz' 
-#quizz.result.view:
-#  path: '/admin/quizz_result/view/{question_id}'
-#  defaults:
-#    _controller: '\Drupal\quizz\Controller\ResultController::view'
-#    _title: 'quizz Result view'
-#  requirements:
-#    _permission: 'administer quizz'

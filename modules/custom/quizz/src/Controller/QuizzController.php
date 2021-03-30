@@ -21,31 +21,37 @@ class QuizzController extends ControllerBase {
   protected $quizzManager;
 
   /**
-   * @var Symfony\Component\HttpFoundation\RequestStack
+   * @var Symfony\Component\HttpFoundation\Request
    */
-  protected $requestStack;
+  protected $currentRequest;
 
   /**
-   * 
+   * @var \Drupal\user\PrivateTempStoreFactory
    */
   protected $tempStore;
 
   /**
+   * @var \stdObject
+   */
+  private $currentQuizzId;
+
+  /**
    * Construct
    *
-   * @param \Drupal\quizz\quizzManager                     $quizzManager quizzManager
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack RequestStack
+   * @param \Drupal\quizz\quizzManager                     $quizzManager      Quizz Manager
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack      Request Stack
+   * @param \Drupal\user\PrivateTempStoreFactory           $tempStoreFactory  temp Store Factory
    */
   public function __construct(
     quizzManager $quizzManager,
     RequestStack $requestStack,
-    PrivateTempStoreFactory $temp_store_factory
+    PrivateTempStoreFactory $tempStoreFactory
   ) {
 
-    $this->quizzManager   = $quizzManager;
-    $this->requestStack   = $requestStack;
-    $this->tempStore      = $temp_store_factory->get('quizz');
-    $this->currentQuizz   = $this->getCurrentQuizz();
+    $this->quizzManager     = $quizzManager;
+    $this->currentRequest   = $requestStack->getCurrentRequest();
+    $this->tempStore        = $tempStoreFactory->get('quizz');
+    $this->currentQuizzId   = $this->getcurrentQuizzId();
   }
 
   /**
@@ -60,17 +66,28 @@ class QuizzController extends ControllerBase {
   }
   
   /**
-   * get Current Quizz
+   * get Current Quizz Id
    */
-  private function getCurrentQuizz() {
-    $quizz = $this->quizzManager->getAvailableQuizz();
-    
-    if (is_null($quizz)) {
-      \Drupal::messenger()->addMessage('Quizz: The quizz is not available', 'error');
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
+  private function getcurrentQuizzId() {
+
+    if ($this->currentRequest->get('quizzId')) {
+      $quizzId = $this->currentRequest->get('quizzId');
+      $this->tempStore->set('quizz.id', $quizzId);
+    } else {
+      $quizzId = $this->tempStore->get('quizz.id');
     }
 
-    return $quizz;
+    if (is_null($quizzId)) {
+      \Drupal::messenger()->addMessage('Quizz: bad parameters', 'error');
+      return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());
+    }
+
+    if (is_null($this->quizzManager->getQuizzById($quizzId))) {
+      \Drupal::messenger()->addMessage('Quizz: The quizz is not available', 'error');
+      return new RedirectResponse(\Drupal\Core\Url::fromRoute('<front>')->toString());
+    }
+
+    return $quizzId;
   }
 
   /**
@@ -79,9 +96,9 @@ class QuizzController extends ControllerBase {
    * @return array
    */
   public function pseudo() {
+
     $build['quizz_question_pseudo'] = [
-      '#quizz'  =>  $this->currentQuizz,
-      '#theme'  => 'quizz_pseudo_template',
+      '#theme'  =>  'quizz_pseudo_template',
     ];
 
     return $build;
@@ -89,42 +106,38 @@ class QuizzController extends ControllerBase {
 
   /**
    * save Pseudo
-   *
-   * @return array
    */
   public function savePseudo() {
-    $currentRequest = $this->requestStack->getCurrentRequest();
-    $pseudo         = $currentRequest->get('quizz')['pseudo'];
-    $clientIp       = $currentRequest->getClientIp();
 
-    if (!$currentRequest->get('quizz')['pseudo']
-      || $this->quizzManager->hasQuizzed($clientIp, $pseudo, $this->currentQuizz->id)
-    ) {
-      \Drupal::messenger()->addMessage('Quizz: You alreadty vote for this quizz', 'error');
-      $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.pseudo')->toString();
-    } else {
-      $questionId = $this->quizzManager->getQuestionsIds($this->currentQuizz->id)[0];
-      $this->tempStore->set('quizz.pseudo', $currentRequest->get('quizz')['pseudo']);
-      $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.view', ['questionId' => $questionId])->toString();
+    $this->tempStore->set('quizz.pseudo', $this->currentRequest->get('quizz')['pseudo']);
+
+    $errors = $this->validate();
+
+    if (!empty($errors)) {
+      return $this->sendErrorResponse($errors);
     }
-   
-    return new RedirectResponse($redirectUrl);
+
+    $questionId = $this->quizzManager->getQuestionsIds($this->currentQuizzId)[0];
+
+    return new RedirectResponse(
+      \Drupal\Core\Url::fromRoute('quizz.view', ['questionId' => $questionId])->toString()
+    );
   }
 
   /**
    * view
    *
    * @param int $questionId
+   * 
+   * @return array
    */
   public function view(int $questionId) {
-    $question   = $this->quizzManager->getQuestionById($questionId, $this->currentQuizz->id);
-    $errors     = $this->validate($questionId);
-    if (!empty($errors)) {
-      foreach ($errors as $error) {
-        \Drupal::messenger()->addMessage($error, 'error');
-        $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.pseudo')->toString();
-      }
-      return new RedirectResponse($redirectUrl);
+    $question   = $this->quizzManager->getQuestionById($questionId, $this->currentQuizzId);
+
+    $errors     = $this->validate($question);
+
+    if (!empty($errors) ) {
+      return $this->sendErrorResponse($errors);
     }
 
     list($questionId, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($questionId);
@@ -142,44 +155,73 @@ class QuizzController extends ControllerBase {
   /**
    * Save
    *
-   * @param int $question_id
-   * @param int $answer_id
+   * @param int $questionId
+   * @param int $answerId
    */
-  public function save(int $question_id, int $answer_id) {
-    $currentRequest = $this->requestStack->getCurrentRequest();
-    $clientIp       = $currentRequest->getClientIp();
-    $pseudo         = $this->tempStore->get('quizz.pseudo');
-    $errors         = $this->validate($question_id);
+  public function save(int $questionId, int $answerId) {
+
+    $question = $this->quizzManager->getQuestionById($questionId, $this->currentQuizzId);
+
+    $errors = $this->validate($question);
 
     if (!empty($errors)) {
-      foreach ($errors as $error) {
-        \Drupal::messenger()->addMessage($error, 'error');
-      }
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
+      return $this->sendErrorResponse($errors);
     }
 
-    $this->quizzManager->saveResult($question_id, $answer_id, $clientIp, $pseudo, $this->currentQuizz->id);
-    list($question_id, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($question_id);
+    $clientIp             = $this->currentRequest->getClientIp();
+    $pseudo               = $this->tempStore->get('quizz.pseudo');
+    list($nextQuestionId) = $this->getNextQuestionInformationById($questionId);
 
-    if (is_null($question_id)) {
+    $this->quizzManager->saveResult($questionId, $answerId, $clientIp, $pseudo, $this->currentQuizzId);
+
+    if (is_null($nextQuestionId)) {
       $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.result')->toString();
     } else {
-      $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.view', ['questionId' => $question_id])->toString();
+      $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.view', ['questionId' => $nextQuestionId])->toString();
     }
-      
+
     return new RedirectResponse($redirectUrl);
   }
 
   /**
-   * result
+   * Validate
    *
+   * @param  mixed  $question
+   *
+   * @return array
+   */
+  private function validate($question = false) {
+    $errors   = [];
+    $clientIp = $this->currentRequest->getClientIp();
+    $pseudo   = $this->tempStore->get('quizz.pseudo');
+
+    if (!$pseudo) {
+      $errors[] = (string) $this->t('Quizz: Pseudo is required.');
+    }
+
+    if (is_null($question)) {
+      $errors[] = (string) $this->t('Quizz: question not found');
+    }
+
+    if ($question !== false) {
+      if ($this->quizzManager->hasQuizzed($clientIp, $pseudo, $this->currentQuizzId, $question['question_id'])) {
+        $errors[] = (string) $this->t('Quizz: You alreadty vote for this quizz');
+      }
+    }
+
+    return $errors;
+  }
+  /**
+   * result
+   * 
+   * @return array
    */
   public function result() {
-    $currentRequest = $this->requestStack->getCurrentRequest();
-    $clientIp       = $currentRequest->getClientIp();
+
+    $clientIp       = $this->currentRequest->getClientIp();
     $pseudo         = $this->tempStore->get('quizz.pseudo');
-    $results        = $this->quizzManager->getResuls($clientIp, $pseudo, $this->currentQuizz->id);
-    $questions      = $this->quizzManager->getQuestions($this->currentQuizz->id);
+    $results        = $this->quizzManager->getResuls($clientIp, $pseudo, $this->currentQuizzId);
+    $questions      = $this->quizzManager->getQuestions($this->currentQuizzId);
     $this->tempStore->set('quizz.pseudo', null);
 
     $count = 0;
@@ -195,8 +237,7 @@ class QuizzController extends ControllerBase {
     }
 
     if ($total !== count($questions)) {
-      \Drupal::messenger()->addMessage('Quizz: Cheater !', 'error');
-      return new RedirectResponse(\Drupal\Core\Url::fromRoute('quizz.pseudo')->toString());
+      return $this->sendErrorResponse((string) $this->t('Quizz: Cheater !'));
     }
 
     $build['quizz_qresult'] = [
@@ -210,31 +251,12 @@ class QuizzController extends ControllerBase {
   }
 
   /**
-   * Validate
-   *
-   * @param int    $question_id
-   * @param int    $answer_id
-   * @param string $clientIp
-
-   * @return array
-   */
-  protected function validate(int $question_id, int $answer_id = null, $clientIp = null) {
-    $errors = [];
-
-    if ( ! $this->tempStore->get('quizz.pseudo')) {
-      $errors[] = $this->t('Quizz: Pseudo is required.');
-    }
-
-    return $errors;
-  }
-
-  /**
    * getNextQuestionInformationById
    * 
    * int $questionId question id
    */
   private function getNextQuestionInformationById(int $questionId) {
-    $questionIds  = $this->quizzManager->getQuestionsIds($this->currentQuizz->id);
+    $questionIds  = $this->quizzManager->getQuestionsIds($this->currentQuizzId);
 
     $currentIndex = array_search($questionId, $questionIds);
     $next         = $currentIndex++;
@@ -243,5 +265,21 @@ class QuizzController extends ControllerBase {
       $currentIndex,
       count($questionIds)
     ];
+  }
+
+  /**
+  * mixed $errors errors
+  */
+  private function sendErrorResponse($errors) {
+
+    if (!is_array($errors)) {
+      $errors = [$errors];
+    }
+
+    $redirectUrl = \Drupal\Core\Url::fromRoute('quizz.pseudo', ['quizzId' => $this->currentQuizzId])->toString();
+    foreach ($errors as $error) {
+      \Drupal::messenger()->addMessage($error, 'error');
+    }
+    return new RedirectResponse($redirectUrl);
   }
 }

@@ -19,7 +19,7 @@
     <ul>
         {% for answer in quizz.answers %}
             <li>
-                <a class="text-entry quizz-answers" href="{{ path('quizz.save', {'question_id': quizz.question_id, 'answer_id': answer.qa_id}) }}">
+                <a class="text-entry quizz-answers" href="{{ path('quizz.save', {'questionId': quizz.question_id, 'answerId': answer.qa_id}) }}">
                     {{ answer.qa_name|e }}
                 </a>
             </li>
