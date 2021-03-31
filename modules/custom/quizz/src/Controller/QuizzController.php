@@ -162,7 +162,7 @@ class QuizzController extends ControllerBase {
 
     $question = $this->quizzManager->getQuestionById($questionId, $this->currentQuizzId);
 
-    $errors = $this->validate($question);
+    $errors = $this->validate($question, $answerId);
 
     if (!empty($errors)) {
       return $this->sendErrorResponse($errors);
@@ -183,34 +183,6 @@ class QuizzController extends ControllerBase {
     return new RedirectResponse($redirectUrl);
   }
 
-  /**
-   * Validate
-   *
-   * @param  mixed  $question
-   *
-   * @return array
-   */
-  private function validate($question = false) {
-    $errors   = [];
-    $clientIp = $this->currentRequest->getClientIp();
-    $pseudo   = $this->tempStore->get('quizz.pseudo');
-
-    if (!$pseudo) {
-      $errors[] = (string) $this->t('Quizz: Pseudo is required.');
-    }
-
-    if (is_null($question)) {
-      $errors[] = (string) $this->t('Quizz: question not found');
-    }
-
-    if ($question !== false) {
-      if ($this->quizzManager->hasQuizzed($clientIp, $pseudo, $this->currentQuizzId, $question['question_id'])) {
-        $errors[] = (string) $this->t('Quizz: You alreadty vote for this quizz');
-      }
-    }
-
-    return $errors;
-  }
   /**
    * result
    * 
@@ -282,4 +254,47 @@ class QuizzController extends ControllerBase {
     }
     return new RedirectResponse($redirectUrl);
   }
+
+  /**
+   * Validate
+   *
+   * @param  mixed  $question
+   * @param  mixed  $answerId
+   *
+   * @return array
+   */
+  private function validate($question = false, $answerId = null) {
+    $errors   = [];
+    $clientIp = $this->currentRequest->getClientIp();
+    $pseudo   = $this->tempStore->get('quizz.pseudo');
+
+    if (!$pseudo) {
+      $errors[] = (string) $this->t('Quizz: Pseudo is required.');
+    }
+
+    if (is_null($question)) {
+      $errors[] = (string) $this->t('Quizz: Question not found');
+    }
+
+    if ($question !== false) {
+      if ($this->quizzManager->hasQuizzed($clientIp, $pseudo, $this->currentQuizzId, $question['question_id'])) {
+        $errors[] = (string) $this->t('Quizz: You alreadty vote for this quizz');
+      }
+
+      if (!is_null($answerId)) {
+
+        $answerIds = [];
+        foreach ($question['answers'] as $answer) {
+          $answerIds[] = $answer->qa_id;
+        }
+
+        if (!in_array($answerId, $answerIds)) {
+          $errors[] = (string) $this->t('Quizz: No relationship between answer and question');
+        }
+      }
+    }
+
+    return $errors;
+  }
+
 }

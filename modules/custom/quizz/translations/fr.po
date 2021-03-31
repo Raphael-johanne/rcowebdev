@@ -21,6 +21,12 @@ msgstr "Quizz: Vous avez déjà participé à ce quizz"
 msgid "Quizz: The quizz is not available"
 msgstr "Quizz: Le quizz n'est pas disponible"
 
+msgid "Quizz: Question not found"
+msgstr "Quizz: Question introuvable"
+
+msgid "Quizz: No relationship between answer and question"
+msgstr "Quizz: Aucune relation entre la réponse et la question"
+
 msgid "Quizz: Cheater !"
 msgstr "Quizz: Ca sent la triche"
 
