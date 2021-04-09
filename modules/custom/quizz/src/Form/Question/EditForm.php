@@ -102,6 +102,14 @@ class EditForm extends FormBase {
             '#default_value'        => [$editedQuestion->fid],
         ];
 
+        $form['quizz_timer'] = [
+            '#type'             => 'textfield',
+            '#title'            => $this->t('Timer'),
+            '#default_value'    => $editedQuestion->timer,
+            '#required'         => false,
+            '#description'      => "In seconds"
+        ];
+
         $form['quizz_answers'] = [
             '#type'             => 'select',
             '#size' =>200,
@@ -135,6 +143,7 @@ class EditForm extends FormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
         $question 	    = $form_state->getValue('quizz_question');
+        $timer 	        = $form_state->getValue('quizz_timer')?:NULL;
         $answers        = $form_state->getValue('quizz_answers');
         $id             = $this->questionId;
         $picture        = $form_state->getValue('quizz_picture', []);
@@ -148,9 +157,10 @@ class EditForm extends FormBase {
         }
         
         $toSave = [
-            'name' => $question, 
-            'quizz_picture' => (!empty($picture)) ? $picture : null, 
-            'quizz_good_answer_id' => $goodAnswerId
+            'name'                  => $question,
+            'timer'                 => $timer,
+            'quizz_picture'         => (!empty($picture)) ? $picture : null, 
+            'quizz_good_answer_id'  => $goodAnswerId
         ];
 
         if ($id > 0) {
@@ -193,7 +203,7 @@ class EditForm extends FormBase {
             return null;
 
         $query = $this->connection->select('quizz_question');
-        $query->fields('quizz_question', ['name']);
+        $query->fields('quizz_question', ['name', 'timer']);
         $query->fields('fm', ['fid']);
         $query->leftJoin('file_managed', 'fm', 'fm.filename = quizz_picture');
         $query->condition('id', $this->questionId, "=");

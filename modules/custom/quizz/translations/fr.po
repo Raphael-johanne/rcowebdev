@@ -38,3 +38,6 @@ msgstr "Réponse donnée"
 
 msgid "Waited answer"
 msgstr "Réponse attendue"
+
+msgid "Timer"
+msgstr "Temps restant"

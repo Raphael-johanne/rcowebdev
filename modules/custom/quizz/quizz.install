@@ -26,6 +26,13 @@ function quizz_schema() {
         'default' => '',
         'description' => 'Question label',
       ],
+      'timer' => [
+        'type' => 'int',
+        'length' => 11,
+        'not null' => FALSE,
+        'default' => null,
+        'description' => 'Question timer',
+      ],
       'quizz_picture' => [
         'type' => 'varchar',
         'length' => 255,

@@ -24,7 +24,7 @@ class QuizzManager implements quizzManagerInterface {
   }
   
   /**
-   * get Question By Id
+   * Get Question By Id
    * 
    * @param int $id
    * @param int $quizzId
@@ -40,7 +40,7 @@ class QuizzManager implements quizzManagerInterface {
     $query->innerJoin('quizz', 'q', 'qqq.quizz_id = q.id'); 
     $query->condition('qq.id', $id);
     $query->condition('q.id', $quizzId);
-    $query->fields('qq', ['id', 'name', 'quizz_picture']);
+    $query->fields('qq', ['id', 'name', 'quizz_picture', 'timer']);
     $query->fields('qa', ['id', 'name']);
     $results = $query->execute()
       ->fetchAll();
@@ -48,6 +48,7 @@ class QuizzManager implements quizzManagerInterface {
     if (!empty($results)) {
       return [
           'question'    => $results[0]->name,
+          'timer'       => $results[0]->timer,
           'picture'     => $results[0]->quizz_picture,
           'question_id' => $results[0]->id,
           'answers'     => $results
@@ -138,14 +139,14 @@ class QuizzManager implements quizzManagerInterface {
    *
    * @return void
    */
-  public function saveResult($questionId, $answerId, $clientIp, $pseudo, $quizzId) {
+  public function saveResult($questionId, $answerId = null, $clientIp, $pseudo, $quizzId) {
     $id = $this->connection->insert('quizz_result')
       ->fields([
         'question_id' => $questionId,
         'answer_id'   => $answerId,
         'ip'          => $clientIp,
         'pseudo'      => $pseudo,
-        'quizz_id'      => $quizzId,
+        'quizz_id'    => $quizzId,
       ])
       ->execute();
   }
@@ -180,7 +181,7 @@ class QuizzManager implements quizzManagerInterface {
   public function getResuls($clientIp, $pseudo, $quizzId) {
     $query = $this->connection->select('quizz_result', 'qr');
     $query->innerJoin('quizz_question', 'qq', 'qq.id = qr.question_id');
-    $query->innerJoin('quizz_answer', 'qa', 'qa.id = qr.answer_id');
+    $query->leftJoin('quizz_answer', 'qa', 'qa.id = qr.answer_id');
     $query->innerJoin('quizz_answer', 'qa2', 'qa2.id = qq.quizz_good_answer_id');
     $query->innerJoin('quizz_quizz_question', 'qqq', 'qqq.question_id = qq.id'); 
     $query->innerJoin('quizz', 'q', 'qqq.quizz_id = q.id'); 
