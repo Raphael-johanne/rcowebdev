@@ -74,7 +74,7 @@ class ResultController extends ControllerBase {
     ];
 
     $query  = $this->connection->select('quizz_result', 'qr');
-    $query->innerJoin('quizz_answer', 'qa', 'qr.answer_id = qa.id');
+    $query->leftJoin('quizz_answer', 'qa', 'qr.answer_id = qa.id');
     $query->innerJoin('quizz_question', 'qq', 'qr.question_id = qq.id');
     $query->innerJoin('quizz_answer', 'qa2', 'qq.quizz_good_answer_id = qa2.id');
     $query->fields('qr', [

@@ -140,6 +140,10 @@ class QuizzController extends ControllerBase {
       return $this->sendErrorResponse($errors);
     }
 
+    if ($question['timer'] > 0) {
+      $this->tempStore->set('quizz.timer.' . $questionId , new \DateTime("now"));
+    }
+
     list($questionId, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($questionId);
 
     $build['quizz_question_pseudo'] = [
@@ -281,7 +285,7 @@ class QuizzController extends ControllerBase {
         $errors[] = (string) $this->t('Quizz: You alreadty vote for this quizz');
       }
 
-      if (!is_null($answerId)) {
+      if ($answerId != 0) {
 
         $answerIds = [];
         foreach ($question['answers'] as $answer) {

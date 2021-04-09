@@ -45,5 +45,20 @@
                     validated = false;
                 }
             });
+
+            // generate timer behaviour
+            if ($('#quizz-timer').length) {
+                let timer               = parseInt($('#quizz-timer').val());
+                const emptyAnswerRoute  = $('#quizz-timer-link');
+                var refrechTimer = setInterval(function() {
+                    timer--;
+                    console.log(timer);
+                    $('#quizz-timer-progress').val(timer);
+                    if (timer === 0) {
+                        window.location = emptyAnswerRoute.val();
+                        validated = false;
+                    }
+                }, 1000);
+            }
         }}
 })(jQuery);

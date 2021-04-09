@@ -1,11 +1,18 @@
 {{ attach_library('quizz/quizz') }}
 <div id="quizz-progress-information">
-{{ 'Question'|t }}&nbsp;{{ currentIndex }}&nbsp;/&nbsp;{{ nbrQuestions }}
-<br />
-<progress value="{{ currentIndex }}" max="{{ nbrQuestions }}">{{ currentIndex }}</progress>
-<br />
+    {{ 'Question'|t }}&nbsp;{{ currentIndex }}&nbsp;/&nbsp;{{ nbrQuestions }}
+    <br />
+    <progress value="{{ currentIndex }}" max="{{ nbrQuestions }}">{{ currentIndex }}</progress>
+    <br />
+    {% if quizz.timer > 0 %}
+        {{ 'Timer'|t }}
+        <br />
+        <progress id="quizz-timer-progress" value="{{ quizz.timer }}" max="{{ quizz.timer }}">{{ quizz.timer }}</progress>
+        <input type="hidden" id="quizz-timer" value="{{ quizz.timer }}" />
+        <input type="hidden" id="quizz-timer-link" value="{{ path('quizz.save', {'questionId': quizz.question_id, 'answerId': 0}) }}" />
+    {% endif %}
+    <br />
 </div>
-
 <div id="quizz-step">
     <div id="quizz-question">
         {{ quizz.question|e }}
@@ -15,7 +22,6 @@
             <img src="{{ file_url('public://downloads') }}/{{ quizz.picture }}" /> 
         </div>
     {% endif %}
-
     <ul>
         {% for answer in quizz.answers %}
             <li>
