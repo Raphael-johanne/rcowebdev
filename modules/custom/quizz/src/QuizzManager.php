@@ -169,7 +169,7 @@ class QuizzManager implements quizzManagerInterface {
       ->fetchCol();
   }
 
-    /**
+  /**
    * getResuls
    * 
    * @param string $clientIp
@@ -181,6 +181,10 @@ class QuizzManager implements quizzManagerInterface {
   public function getResuls($clientIp, $pseudo, $quizzId) {
     $query = $this->connection->select('quizz_result', 'qr');
     $query->innerJoin('quizz_question', 'qq', 'qq.id = qr.question_id');
+    /**
+     * In case of timer question, left join is necessary to have row result even if quizz_answer is empty
+     * having the row is important to match with questions count
+     */
     $query->leftJoin('quizz_answer', 'qa', 'qa.id = qr.answer_id');
     $query->innerJoin('quizz_answer', 'qa2', 'qa2.id = qq.quizz_good_answer_id');
     $query->innerJoin('quizz_quizz_question', 'qqq', 'qqq.question_id = qq.id'); 

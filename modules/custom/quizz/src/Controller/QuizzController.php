@@ -141,7 +141,7 @@ class QuizzController extends ControllerBase {
     }
 
     if ($question['timer'] > 0) {
-      $this->tempStore->set('quizz.timer.' . $questionId , new \DateTime("now"));
+      $this->tempStore->set('quizz.timer.' . $questionId, new \DateTime("now"));
     }
 
     list($questionId, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($questionId);
@@ -227,9 +227,11 @@ class QuizzController extends ControllerBase {
   }
 
   /**
-   * getNextQuestionInformationById
+   * Get Next Question Information By Id
    * 
-   * int $questionId question id
+   * @param int $questionId question id
+   * 
+   * @return array
    */
   private function getNextQuestionInformationById(int $questionId) {
     $questionIds  = $this->quizzManager->getQuestionsIds($this->currentQuizzId);
@@ -262,12 +264,12 @@ class QuizzController extends ControllerBase {
   /**
    * Validate
    *
-   * @param  mixed  $question
-   * @param  mixed  $answerId
+   * @param  mixed  $question question
+   * @param  mixed  $answerId answer id
    *
    * @return array
    */
-  private function validate($question = false, $answerId = null) {
+  protected function validate($question = false, $answerId = null) {
     $errors   = [];
     $clientIp = $this->currentRequest->getClientIp();
     $pseudo   = $this->tempStore->get('quizz.pseudo');
@@ -287,6 +289,16 @@ class QuizzController extends ControllerBase {
 
       if ($answerId != 0) {
 
+        if ($question['timer'] > 0) {
+          $currentDate  = new \DateTime('now');
+          $timer        = $this->tempStore->get('quizz.timer.' . $question['question_id']);
+          $interval     = $currentDate->diff($timer);
+
+          if ((int) $interval->format('%s') > (int) $question['timer']) {
+            $errors[] = (string) $this->t("Quizz: It looks like you've run out of time for a question");
+          }
+        }
+
         $answerIds = [];
         foreach ($question['answers'] as $answer) {
           $answerIds[] = $answer->qa_id;
@@ -300,5 +312,4 @@ class QuizzController extends ControllerBase {
 
     return $errors;
   }
-
 }
