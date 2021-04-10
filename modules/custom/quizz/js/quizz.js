@@ -46,16 +46,17 @@
                 }
             });
 
-            // generate timer behaviour
-            if ($('#quizz-timer').length) {
+            /**
+             * generate timer behaviour
+             */
+            if ($('#quizz-timer').length > 0) {
                 let timer               = parseInt($('#quizz-timer').val());
-                const emptyAnswerRoute  = $('#quizz-timer-link');
-                var refrechTimer = setInterval(function() {
+                const emptyAnswerRoute  = $('#quizz-timer-link').val();
+                setInterval(function() {
                     timer--;
-                    console.log(timer);
                     $('#quizz-timer-progress').val(timer);
                     if (timer === 0) {
-                        window.location = emptyAnswerRoute.val();
+                        window.location = emptyAnswerRoute;
                         validated = false;
                     }
                 }, 1000);

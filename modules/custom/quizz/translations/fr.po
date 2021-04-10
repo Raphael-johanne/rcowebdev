@@ -41,3 +41,6 @@ msgstr "Réponse attendue"
 
 msgid "Timer"
 msgstr "Temps restant"
+
+msgid "Quizz: It looks like you've run out of time for a question"
+msgstr "Il semble que vous avez dépassé le temps apparti pour une question"
