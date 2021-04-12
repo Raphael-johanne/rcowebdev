@@ -141,7 +141,12 @@ class QuizzController extends ControllerBase {
     }
 
     if ($question['timer'] > 0) {
-      $this->tempStore->set('quizz.timer.' . $questionId, new \DateTime("now"));
+      /**
+       * in case of reloaded pages, do not reset timer for the current question Id
+       */
+      if (is_null($this->tempStore->get('quizz.timer.' . $questionId))) {
+        $this->tempStore->set('quizz.timer.' . $questionId, new \DateTime("now"));
+      }
     }
 
     list($questionId, $currentIndex, $nbrQuestions)  = $this->getNextQuestionInformationById($questionId);
