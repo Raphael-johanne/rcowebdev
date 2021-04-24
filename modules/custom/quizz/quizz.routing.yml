@@ -41,6 +41,8 @@ quizz.save:
     _title: 'quizz result save'
   requirements:
     _access: 'TRUE'
+  options:
+     no_cache: TRUE
 # ADMIN
 quizz.overview:
   path: '/admin/quizz/list'
