@@ -110,7 +110,7 @@ class QuizzController extends ControllerBase {
   public function savePseudo() {
 
     $this->tempStore->set('quizz.pseudo', $this->currentRequest->get('quizz')['pseudo']);
-
+  
     $errors = $this->validate();
 
     if (!empty($errors)) {
@@ -295,11 +295,14 @@ class QuizzController extends ControllerBase {
       if ($answerId != 0) {
 
         if ($question['timer'] > 0) {
+
+          $timer  = $this->tempStore->get('quizz.timer.' . $question['question_id']);
+          $this->tempStore->set('quizz.timer.' . $question['question_id'], null);
+
           $currentDate  = new \DateTime('now');
-          $timer        = $this->tempStore->get('quizz.timer.' . $question['question_id']);
           $interval     = $currentDate->diff($timer);
 
-          if ((int) $interval->format('%s') > (int) $question['timer']) {
+          if (! $interval || ((int) $interval->format('%s') > (int) $question['timer'])) {
             $errors[] = (string) $this->t("Quizz: It looks like you've run out of time for a question");
           }
         }
