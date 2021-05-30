@@ -46,7 +46,7 @@ class FilmManager{
     $string = "<ul>";
 
     $datetime = new \DateTime('now');
-    $datetime->modify('-7 day');
+    $datetime->modify('-14 day');
     $datetime->format('Y-m-d H:i:s');
     $films = $this->getFilmsByDate($datetime->format('Y-m-d H:i:s'));
     
