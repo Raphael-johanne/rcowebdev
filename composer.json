@@ -43,7 +43,7 @@
         "drupal/smtp": "^1.0",
         "drupal/superfish": "^1.4",
         "drupal/token": "^1.9",
-        "drupal/webform": "^5.26",
+        "drupal/webform": "^5.27",
         "drush/drush": "^10.3"
     },
     "conflict": {
