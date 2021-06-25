@@ -40,3 +40,9 @@
 #bug-report-message {
   height:150px;
 }
+
+@media screen and (max-width: 600px) {
+  #block-bugreportblock {
+    display: none;
+  }
+}
