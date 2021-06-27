@@ -2,6 +2,8 @@
 
 function search_autocomplete_theme($existing, $type, $theme, $path) {
   return [
-    'search_autocomplete' => []
+    'search_autocomplete' => [
+      'variables' => []
+    ]
   ];
 }
