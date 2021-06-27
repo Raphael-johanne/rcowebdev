@@ -75,14 +75,32 @@ class AnswerController extends ControllerBase {
       ->execute();
 
     foreach ($pollAnwers as $pollAnswer) {
-      $rows[] = [
-        'data' => [
-        	$pollAnswer->id,
-          	$this->t($pollAnswer->name),
-          	$this->l($this->t('Edit'), new Url('poll.answer.edit', ['id' => $pollAnswer->id])),
-            $this->l($this->t('Delete'), new Url('poll.answer.delete', ['id' => $pollAnswer->id]))
-        ]
+
+      $links = [];
+      
+      $row = [
+        $pollAnswer->id,
+        $pollAnswer->name
       ];
+
+      $links['edit'] = [
+        'title' => $this->t('Edit'),
+        'url'   => Url::fromRoute('poll.answer.edit', ['id' => $pollAnswer->id]),
+      ];
+
+      $links['delete'] = [
+        'title' => $this->t('Delete'),
+        'url'   => Url::fromRoute('poll.answer.delete', ['id' => $pollAnswer->id]),
+      ];
+
+      $row[] = [
+        'data' => [
+          '#type'   => 'operations',
+          '#links'  => $links,
+        ],
+      ];
+
+      $rows[] = $row;
     }
 
     $build['poll_answer_table'] = [

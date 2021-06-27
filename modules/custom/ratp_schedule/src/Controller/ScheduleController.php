@@ -77,14 +77,32 @@ class ScheduleController extends ControllerBase {
       ->execute();
 
     foreach ($items as $item) {
-      $rows[] = [
-        'data' => [
-        	  $item->ratp_schedule_id,
-          	$this->t($item->ratp_schedule_name),
-          	$this->l($this->t('Edit'), new Url('ratp_schedule.schedule.edit', ['id' => $item->ratp_schedule_id])),
-            $this->l($this->t('Delete'), new Url('ratp_schedule.schedule.delete', ['id' => $item->ratp_schedule_id]))
-        ]
+
+      $links = [];
+      
+      $row = [
+        $item->ratp_schedule_id,
+        $item->ratp_schedule_name
       ];
+
+      $links['edit'] = [
+        'title' => $this->t('Edit'),
+        'url'   => Url::fromRoute('ratp_schedule.schedule.edit', ['id' => $item->ratp_schedule_id]),
+      ];
+
+      $links['delete'] = [
+        'title' => $this->t('Delete'),
+        'url'   => Url::fromRoute('ratp_schedule.schedule.delete', ['id' => $item->ratp_schedule_id]),
+      ];
+
+      $row[] = [
+        'data' => [
+          '#type'   => 'operations',
+          '#links'  => $links,
+        ],
+      ];
+
+      $rows[] = $row;
     }
 
     $build['ratp_schedule_table'] = [
