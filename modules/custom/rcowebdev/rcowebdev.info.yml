@@ -1,0 +1,6 @@
+name: rcowebdev Module
+description: rcowebdev module
+package: Custom
+
+type: module
+core: 8.x

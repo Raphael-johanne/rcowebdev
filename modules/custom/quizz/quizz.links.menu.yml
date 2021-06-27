@@ -2,7 +2,7 @@ quizz.overview:
   title: 'Quizz'
   description: 'Administer quizz overview'
   route_name: quizz.overview
-  parent: system.admin_content
+  parent: rcowebdev.custom
   weight: 0
 quizz.answer:
   title: 'Answers'

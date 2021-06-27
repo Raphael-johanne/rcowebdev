@@ -2,7 +2,7 @@ ratp_schedule.overview:
   title: 'Ratp Schedule'
   description: 'Administer Polls'
   route_name: ratp_schedule.overview
-  parent: system.admin_reports
+  parent: rcowebdev.custom
   weight: -1
 ratp_schedule.edit:
   title: 'Ratp Schedule edition'
