@@ -1,0 +1,6 @@
+rcowebdev.custom:
+  route_name: system.themes_page
+  title: Custom
+  description: 'Custom modules'
+  parent: system.admin
+  weight: 10
