@@ -7,4 +7,5 @@ video-preload:
     https://cdn.jsdelivr.net/npm/jquery.md5@1.0.2/index.min.js: { type: external }
     js/preload.js: {}
   dependencies:
-    - core/jquery  
+    - core/jquery
+    - core/jquery.cookie
