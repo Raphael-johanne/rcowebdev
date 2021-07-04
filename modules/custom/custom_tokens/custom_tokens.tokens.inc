@@ -13,7 +13,7 @@ function custom_tokens_token_info() {
   ];
   $info['tokens']['custom_tokens']['films_list'] = [
       'name' => "Film's list",
-      'description' => 'A list of the films of the current week',
+      'description' => 'A list of films, The possible entry (? = nbr day) is an int negative or positive',
       'type' => 'custom_tokens',
   ];
   return $info;
@@ -27,10 +27,11 @@ function custom_tokens_tokens($type, $tokens, array $data, array $options, Bubbl
   if ($type == 'custom_tokens') {
 
     foreach ($tokens as $name => $original) {
+      list($name, $nbr) = explode(':', $name);
       switch ($name) {
         case 'films_list':
-          $filmManager = \Drupal::service('custom_tokens.film_manager');
-          $replacements[$original] = \Drupal\Core\Render\Markup::create($filmManager->getFormatedFilms());
+          $film = \Drupal::service('custom_tokens.film');
+          $replacements[$original] = \Drupal\Core\Render\Markup::create($film->getFormatedFilms($nbr));
         break;
       }
     }
