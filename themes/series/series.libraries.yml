@@ -1,0 +1,15 @@
+global-css:
+  css:
+    theme:
+      assets/css/bootstrap.min.css: {}
+      assets/css/style.css: {}
+      assets/css/custom.css: {}
+      assets/css/colorbox.css: {}
+global-js:
+  js:
+    assets/js/bootstrap.min.js: {}
+    assets/js/custom.js: {}
+    assets/js/jquery.colorbox-min.js : {}
+  dependencies:
+    - core/jquery
+    - core/drupal
